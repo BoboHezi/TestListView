@@ -22,6 +22,8 @@ public class MoveControlView extends View {
     private static final int STROKE_WIDTH = 3;
     //圆点半径
     private static final int POINT_RADIUS = 30;
+    //偏移距离
+    private static final float OFFSET_PIX = 5;
 
     //画笔
     private Paint paint;
@@ -220,7 +222,7 @@ public class MoveControlView extends View {
         public void run() {
             while (true) {
                 //当圆点和中心点距离小于10.或者线程被中断时，退出循环
-                if (offset <= 10 || this.isInterrupted()) {
+                if (offset <= OFFSET_PIX * 2 || this.isInterrupted()) {
                     //退出循环之前调用状态改变的接口
                     if (velocityStateChangedListener != null) {
                         velocityStateChangedListener.onVelocityStateChanged(new Velocity(0, Velocity.Direction.front));
@@ -233,16 +235,16 @@ public class MoveControlView extends View {
                 float cos = (float) Math.cos(radius);
                 float sin = (float) Math.sin(radius);
                 //计算对应角度下的X，Y轴偏移
-                float offsetX = 5 * cos;
-                float offsetY = 5 * sin;
+                float offsetX = OFFSET_PIX * cos;
+                float offsetY = OFFSET_PIX * sin;
                 //设置对应的偏移
                 radiusX += offsetX;
                 radiusY += offsetY;
 
                 //当偏移的X轴或者Y轴接近中心点时，将位置设置到中心点
-                if (Math.abs(radiusX - defaultRadiusX) < 10)
+                if (Math.abs(radiusX - defaultRadiusX) < OFFSET_PIX * 2)
                     radiusX = defaultRadiusX;
-                if (Math.abs(radiusY - defaultRadiusY) < 10)
+                if (Math.abs(radiusY - defaultRadiusY) < OFFSET_PIX * 2)
                     radiusY = defaultRadiusY;
 
                 try {
