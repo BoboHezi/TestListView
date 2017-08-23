@@ -6,11 +6,20 @@
     android:focusableInTouchMode="true"
     android:layout_height="match_parent">
 
-    <eli.per.view.MoveControlView
-        android:id="@+id/control_view"
-        android:layout_marginTop="100dp"
-        android:layout_gravity="center"
-        android:layout_width="200dp"
-        android:layout_height="100dp" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/banner"/>
+
+        <Button
+            android:id="@+id/control_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Control"/>
+    </FrameLayout>
 </LinearLayout>

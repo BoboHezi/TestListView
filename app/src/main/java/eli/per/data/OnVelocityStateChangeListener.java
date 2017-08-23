@@ -1,4 +1,4 @@
-package eli.per.view;
+package eli.per.data;
 
 public interface OnVelocityStateChangeListener {
 

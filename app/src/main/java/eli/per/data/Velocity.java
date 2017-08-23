@@ -1,8 +1,8 @@
-package eli.per.view;
+package eli.per.data;
 
 public class Velocity {
 
-    enum Direction {
+    public enum Direction {
         front,
         left,
         right
