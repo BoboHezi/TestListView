@@ -2,14 +2,12 @@ package eli.per.data;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.view.View;
 
 public class Util {
 
     /**
      * Dip转像素
+     *
      * @param context
      * @param dpValue
      * @return
@@ -21,6 +19,7 @@ public class Util {
 
     /**
      * 像素转Dip
+     *
      * @param context
      * @param pxValue
      * @return
@@ -32,6 +31,7 @@ public class Util {
 
     /**
      * 判断屏幕方向
+     *
      * @param context
      * @return
      */

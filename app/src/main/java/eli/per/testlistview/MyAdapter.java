@@ -3,6 +3,7 @@ package eli.per.testlistview;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;

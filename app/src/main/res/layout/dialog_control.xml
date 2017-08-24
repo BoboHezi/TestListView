@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <eli.per.view.MoveControlView
         android:id="@+id/control_view"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="10dp"
         android:layout_gravity="center"
-        android:layout_width="200dp"
-        android:layout_height="100dp" />
+        android:layout_width="240dp"
+        android:layout_height="120dp" />
+
+    <eli.per.view.ItemSelectView
+        android:id="@+id/control_resolution"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:background="#00000000"
+        app:pointColor="#095954"
+        app:lineColor="#09938c"
+        app:textColor="#767676"
+        app:pointRadius="15"
+        app:lineHeight="4"
+        app:title="分辨率" />
 
 </LinearLayout>

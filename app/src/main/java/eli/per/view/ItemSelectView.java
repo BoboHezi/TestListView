@@ -1,0 +1,213 @@
+package eli.per.view;
+
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import eli.per.data.OnSelectedItemChangeListener;
+import eli.per.testlistview.R;
+
+public class ItemSelectView extends View {
+
+    private static final String TAG = "ItemSelect";
+
+    //线条颜色
+    private int lineColor;
+    //圆点颜色
+    private int pointColor;
+    //字体颜色
+    private int textColor;
+    //线条高度
+    private float lineHeight;
+    //圆点半径
+    private float pointRadius;
+    //标题
+    private String title;
+    //选择条目
+    private List<String> selectItems;
+    //组件宽度
+    private float windowWidth;
+    //组件高度
+    private float windowHeight;
+    //线条宽度
+    private float realWidth;
+    //内部向下偏移值
+    private float offset;
+    //圆点位置X值
+    private float pointRadiusX;
+    //圆点位置Y值
+    private float pointRadiusY;
+
+    private OnSelectedItemChangeListener selectedItemChangeListener;
+
+    private Context context;
+    private Paint paint;
+
+    public ItemSelectView(Context context) {
+        this(context, null);
+    }
+
+    public ItemSelectView(Context context, AttributeSet attributeSet) {
+        this(context, attributeSet, 0);
+    }
+
+    public ItemSelectView(Context context, AttributeSet attributeSet, int defStyle) {
+        super(context, attributeSet, defStyle);
+        this.context = context;
+        //初始化画笔
+        paint = new Paint();
+        paint.setAntiAlias(true);
+        //初始化条目
+        selectItems = new ArrayList<>();
+        //获取配置值
+        TypedArray ta = context.obtainStyledAttributes(attributeSet, R.styleable.styleable_itemselect);
+        lineColor = ta.getColor(R.styleable.styleable_itemselect_lineColor, 0xff777777);
+        pointColor = ta.getColor(R.styleable.styleable_itemselect_pointColor, 0xff000000);
+        textColor = ta.getColor(R.styleable.styleable_itemselect_textColor, 0xff000000);
+        lineHeight = ta.getInt(R.styleable.styleable_itemselect_lineHeight, 5);
+        pointRadius = ta.getInt(R.styleable.styleable_itemselect_pointRadius, 10);
+        title = ta.getString(R.styleable.styleable_itemselect_title) + " ";
+        ta.recycle();
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        //获取组件宽高
+        windowWidth = getMeasuredWidth();
+        windowHeight = getMeasuredHeight();
+        //设置内部向下偏移值
+        offset = windowHeight / 6;
+        //设置圆点坐标的Y值，固定
+        pointRadiusY = windowHeight / 2 + offset;
+    }
+
+    /**
+     * 设置选择条目变化监听
+     *
+     * @param selectedItemChangeListener
+     */
+    public void setOnSelectedItemChangeListener(OnSelectedItemChangeListener selectedItemChangeListener) {
+        this.selectedItemChangeListener = selectedItemChangeListener;
+    }
+
+    /**
+     * 设置可以选择的项目
+     *
+     * @param items
+     */
+    public void setSelectItems(List<String> items) {
+        this.selectItems = items;
+    }
+
+    /**
+     * 计算索引
+     *
+     * @return
+     */
+    private int calculateIndex() {
+        float pieceWidth = realWidth / selectItems.size();
+        float offsetWidth = windowWidth - realWidth;
+        int index = (int) ((pointRadiusX - offsetWidth) / pieceWidth);
+        return index;
+    }
+
+    /**
+     * 获取当前索引
+     *
+     * @return
+     */
+    public int getIndex() {
+        return calculateIndex();
+    }
+
+    /**
+     * 设置当前索引
+     *
+     * @param index
+     */
+    public void setIndex(int index) {
+        float pieceWidth = realWidth / selectItems.size();
+        float offsetWidth = windowWidth - realWidth;
+        pointRadiusX = index * pieceWidth + pieceWidth / 2 + offsetWidth;
+        postInvalidate();
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+
+        //绘制标题
+        paint.setColor(textColor);
+        paint.setTextSize(30);
+        float titleTextWidth = paint.measureText(title);
+        float titleTextHeight = -(paint.ascent() + paint.descent());
+        canvas.drawText(title, 0, (windowHeight + titleTextHeight) / 2 + offset, paint);
+
+        //绘制线条
+        paint.setColor(lineColor);
+        paint.setStrokeWidth(lineHeight);
+        canvas.drawLine(titleTextWidth, windowHeight / 2 + offset, windowWidth, windowHeight / 2 + offset, paint);
+
+        //获得线条实际宽度
+        realWidth = windowWidth - titleTextWidth;
+        float itemWidth = realWidth / selectItems.size();
+
+        //绘制条目
+        paint.setTextSize(26);
+        for (int i = 0; i < selectItems.size(); i++) {
+            paint.setColor(textColor);
+            String itemText = selectItems.get(i);
+            float itemTextWidth = paint.measureText(itemText);
+            float itemTextHeight = -(paint.descent() + paint.ascent());
+            float start = i * itemWidth + itemWidth / 2 + titleTextWidth;
+            //绘制条目文本
+            canvas.drawText(itemText, start - itemTextWidth / 2, itemTextHeight + offset, paint);
+            paint.setColor(pointColor);
+            //绘制对应小点
+            canvas.drawCircle(start, windowHeight / 2 + offset, (float) (lineHeight * 1.5), paint);
+        }
+
+        //绘制圆点
+        paint.setColor(pointColor);
+        if (pointRadiusX == 0) {
+            pointRadiusX = itemWidth / 2 + titleTextWidth;
+        }
+        canvas.drawCircle(pointRadiusX, pointRadiusY, pointRadius, paint);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        //获得触点的X值
+        pointRadiusX = event.getX();
+        float offsetWidth = windowWidth - realWidth;
+
+        //控制圆点坐标不会溢出
+        if (pointRadiusX < offsetWidth + pointRadius / 2)
+            pointRadiusX = offsetWidth + pointRadius / 2;
+        if (pointRadiusX > windowWidth - pointRadius / 2)
+            pointRadiusX = windowWidth - pointRadius / 2;
+
+        //当手指抬起时，计算并定位到最近的条目
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            float pieceWidth = realWidth / selectItems.size();
+            int index = calculateIndex();
+            pointRadiusX = index * pieceWidth + pieceWidth / 2 + offsetWidth;
+            if (selectedItemChangeListener != null) {
+                selectedItemChangeListener.onItemSelectedChanged(calculateIndex());
+            }
+        }
+
+        postInvalidate();
+        return super.onTouchEvent(event);
+    }
+}

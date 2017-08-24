@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+
 import eli.per.view.ControlDialog;
 
 public class ControlActivity extends AppCompatActivity implements View.OnClickListener {
@@ -37,7 +38,6 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         controlDialog = new ControlDialog(this);
-        controlDialog.setCanceledOnTouchOutside(true);
         controlDialog.show();
     }
 }

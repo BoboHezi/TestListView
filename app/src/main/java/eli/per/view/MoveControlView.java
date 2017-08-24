@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
 import eli.per.data.OnVelocityStateChangeListener;
 import eli.per.data.Velocity;
 
@@ -67,6 +68,11 @@ public class MoveControlView extends View {
         velocity = new Velocity(0, Velocity.Direction.front);
     }
 
+    /**
+     * 设置速度变化监听
+     *
+     * @param velocityStateChangedListener
+     */
     public void setOnVelocityStateChangedListener(OnVelocityStateChangeListener velocityStateChangedListener) {
         this.velocityStateChangedListener = velocityStateChangedListener;
     }
