@@ -3,16 +3,12 @@ package eli.per.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import eli.per.data.OnSelectedItemChangeListener;
 import eli.per.testlistview.R;
 
@@ -30,23 +26,19 @@ public class ItemSelectView extends View {
     private float lineHeight;
     //圆点半径
     private float pointRadius;
-    //标题
-    private String title;
     //选择条目
     private List<String> selectItems;
     //组件宽度
     private float windowWidth;
     //组件高度
     private float windowHeight;
-    //线条宽度
-    private float realWidth;
     //内部向下偏移值
     private float offset;
     //圆点位置X值
     private float pointRadiusX;
     //圆点位置Y值
     private float pointRadiusY;
-
+    //选择条目改变接口
     private OnSelectedItemChangeListener selectedItemChangeListener;
 
     private Context context;
@@ -75,7 +67,6 @@ public class ItemSelectView extends View {
         textColor = ta.getColor(R.styleable.styleable_itemselect_textColor, 0xff000000);
         lineHeight = ta.getInt(R.styleable.styleable_itemselect_lineHeight, 5);
         pointRadius = ta.getInt(R.styleable.styleable_itemselect_pointRadius, 10);
-        title = ta.getString(R.styleable.styleable_itemselect_title) + " ";
         ta.recycle();
     }
 
@@ -115,9 +106,8 @@ public class ItemSelectView extends View {
      * @return
      */
     private int calculateIndex() {
-        float pieceWidth = realWidth / selectItems.size();
-        float offsetWidth = windowWidth - realWidth;
-        int index = (int) ((pointRadiusX - offsetWidth) / pieceWidth);
+        float pieceWidth = windowWidth / selectItems.size();
+        int index = (int) (pointRadiusX / pieceWidth);
         return index;
     }
 
@@ -136,30 +126,20 @@ public class ItemSelectView extends View {
      * @param index
      */
     public void setIndex(int index) {
-        float pieceWidth = realWidth / selectItems.size();
-        float offsetWidth = windowWidth - realWidth;
-        pointRadiusX = index * pieceWidth + pieceWidth / 2 + offsetWidth;
+        float pieceWidth = windowWidth / selectItems.size();
+        pointRadiusX = index * pieceWidth + pieceWidth / 2;
         postInvalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
 
-        //绘制标题
-        paint.setColor(textColor);
-        paint.setTextSize(30);
-        float titleTextWidth = paint.measureText(title);
-        float titleTextHeight = -(paint.ascent() + paint.descent());
-        canvas.drawText(title, 0, (windowHeight + titleTextHeight) / 2 + offset, paint);
-
         //绘制线条
         paint.setColor(lineColor);
         paint.setStrokeWidth(lineHeight);
-        canvas.drawLine(titleTextWidth, windowHeight / 2 + offset, windowWidth, windowHeight / 2 + offset, paint);
+        canvas.drawLine(0, windowHeight / 2 + offset, windowWidth, windowHeight / 2 + offset, paint);
 
-        //获得线条实际宽度
-        realWidth = windowWidth - titleTextWidth;
-        float itemWidth = realWidth / selectItems.size();
+        float itemWidth = windowWidth / selectItems.size();
 
         //绘制条目
         paint.setTextSize(26);
@@ -168,7 +148,7 @@ public class ItemSelectView extends View {
             String itemText = selectItems.get(i);
             float itemTextWidth = paint.measureText(itemText);
             float itemTextHeight = -(paint.descent() + paint.ascent());
-            float start = i * itemWidth + itemWidth / 2 + titleTextWidth;
+            float start = i * itemWidth + itemWidth / 2;
             //绘制条目文本
             canvas.drawText(itemText, start - itemTextWidth / 2, itemTextHeight + offset, paint);
             paint.setColor(pointColor);
@@ -179,7 +159,7 @@ public class ItemSelectView extends View {
         //绘制圆点
         paint.setColor(pointColor);
         if (pointRadiusX == 0) {
-            pointRadiusX = itemWidth / 2 + titleTextWidth;
+            pointRadiusX = itemWidth / 2;
         }
         canvas.drawCircle(pointRadiusX, pointRadiusY, pointRadius, paint);
     }
@@ -189,19 +169,18 @@ public class ItemSelectView extends View {
 
         //获得触点的X值
         pointRadiusX = event.getX();
-        float offsetWidth = windowWidth - realWidth;
 
         //控制圆点坐标不会溢出
-        if (pointRadiusX < offsetWidth + pointRadius / 2)
-            pointRadiusX = offsetWidth + pointRadius / 2;
+        if (pointRadiusX <  pointRadius / 2)
+            pointRadiusX = pointRadius / 2;
         if (pointRadiusX > windowWidth - pointRadius / 2)
             pointRadiusX = windowWidth - pointRadius / 2;
 
         //当手指抬起时，计算并定位到最近的条目
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            float pieceWidth = realWidth / selectItems.size();
+            float pieceWidth = windowWidth / selectItems.size();
             int index = calculateIndex();
-            pointRadiusX = index * pieceWidth + pieceWidth / 2 + offsetWidth;
+            pointRadiusX = index * pieceWidth + pieceWidth / 2;
             if (selectedItemChangeListener != null) {
                 selectedItemChangeListener.onItemSelectedChanged(calculateIndex());
             }
