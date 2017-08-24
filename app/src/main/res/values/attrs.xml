@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="styleable_itemselect">
+    <declare-styleable name="styleable_item_select">
         <attr name="lineColor" format="color" />
         <attr name="pointColor" format="color" />
         <attr name="textColor" format="color" />
         <attr name="lineHeight" format="integer" />
         <attr name="pointRadius" format="integer" />
         <attr name="title" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="styleable_progress_loading">
+        <attr name="circleColor" format="color"/>
+        <attr name="circleRadius" format="float"/>
     </declare-styleable>
 
 </resources>

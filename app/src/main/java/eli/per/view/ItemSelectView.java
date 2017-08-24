@@ -61,12 +61,12 @@ public class ItemSelectView extends View {
         //初始化条目
         selectItems = new ArrayList<>();
         //获取配置值
-        TypedArray ta = context.obtainStyledAttributes(attributeSet, R.styleable.styleable_itemselect);
-        lineColor = ta.getColor(R.styleable.styleable_itemselect_lineColor, 0xff777777);
-        pointColor = ta.getColor(R.styleable.styleable_itemselect_pointColor, 0xff000000);
-        textColor = ta.getColor(R.styleable.styleable_itemselect_textColor, 0xff000000);
-        lineHeight = ta.getInt(R.styleable.styleable_itemselect_lineHeight, 5);
-        pointRadius = ta.getInt(R.styleable.styleable_itemselect_pointRadius, 10);
+        TypedArray ta = context.obtainStyledAttributes(attributeSet, R.styleable.styleable_item_select);
+        lineColor = ta.getColor(R.styleable.styleable_item_select_lineColor, 0xff777777);
+        pointColor = ta.getColor(R.styleable.styleable_item_select_pointColor, 0xff000000);
+        textColor = ta.getColor(R.styleable.styleable_item_select_textColor, 0xff000000);
+        lineHeight = ta.getInt(R.styleable.styleable_item_select_lineHeight, 5);
+        pointRadius = ta.getInt(R.styleable.styleable_item_select_pointRadius, 10);
         ta.recycle();
     }
 
