@@ -8,13 +8,16 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import eli.per.view.ControlDialog;
+import eli.per.view.VideoLoadingView;
 
 public class ControlActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "ControlActivity";
 
     private Button controlButton;
+    private Button controlLoadButton;
     private ControlDialog controlDialog;
+    private VideoLoadingView videoLoadingView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,11 +35,26 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
     private void initView() {
         controlButton = (Button) findViewById(R.id.control_show);
         controlButton.setOnClickListener(this);
+        controlLoadButton = (Button) findViewById(R.id.control_loading_button);
+        controlLoadButton.setOnClickListener(this);
+
+        videoLoadingView = (VideoLoadingView) findViewById(R.id.control_loading);
     }
 
     @Override
     public void onClick(View view) {
-        controlDialog = new ControlDialog(this);
-        controlDialog.show();
+
+        if (view.getId() == R.id.control_show) {
+            controlDialog = new ControlDialog(this);
+            controlDialog.show();
+        } else if (view.getId() == R.id.control_loading_button) {
+            if (controlLoadButton.getText().equals("开始")) {
+                controlLoadButton.setText("结束");
+                videoLoadingView.startLoading();
+            } else if (controlLoadButton.getText().equals("结束")) {
+                controlLoadButton.setText("开始");
+                videoLoadingView.cancelLoading();
+            }
+        }
     }
 }

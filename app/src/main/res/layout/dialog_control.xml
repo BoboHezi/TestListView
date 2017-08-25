@@ -25,8 +25,4 @@
         app:lineHeight="4"
         app:title="分辨率" />
 
-    <eli.per.view.ResourceLoadingView
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
 </LinearLayout>
