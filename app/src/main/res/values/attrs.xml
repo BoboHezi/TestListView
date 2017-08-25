@@ -11,8 +11,8 @@
     </declare-styleable>
 
     <declare-styleable name="styleable_progress_loading">
-        <attr name="circleColor" format="color"/>
-        <attr name="circleRadius" format="float"/>
+        <attr name="circleColor" format="color" />
+        <attr name="circleRadius" format="float" />
     </declare-styleable>
 
 </resources>

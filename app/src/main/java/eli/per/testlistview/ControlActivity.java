@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+
 import eli.per.view.ControlDialog;
 import eli.per.view.VideoLoadingView;
 

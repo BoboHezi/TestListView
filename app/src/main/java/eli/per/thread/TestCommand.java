@@ -3,10 +3,12 @@ package eli.per.thread;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+
 import eli.per.testlistview.ConnectActivity;
 
 public class TestCommand {

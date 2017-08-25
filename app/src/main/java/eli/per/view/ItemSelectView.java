@@ -38,6 +38,8 @@ public class ItemSelectView extends View {
     private float pointRadiusX;
     //圆点位置Y值
     private float pointRadiusY;
+    //被选择的index
+    private int selectedIndex;
     //选择条目改变接口
     private OnSelectedItemChangeListener selectedItemChangeListener;
 
@@ -171,7 +173,7 @@ public class ItemSelectView extends View {
         pointRadiusX = event.getX();
 
         //控制圆点坐标不会溢出
-        if (pointRadiusX <  pointRadius / 2)
+        if (pointRadiusX < pointRadius / 2)
             pointRadiusX = pointRadius / 2;
         if (pointRadiusX > windowWidth - pointRadius / 2)
             pointRadiusX = windowWidth - pointRadius / 2;
@@ -182,7 +184,11 @@ public class ItemSelectView extends View {
             int index = calculateIndex();
             pointRadiusX = index * pieceWidth + pieceWidth / 2;
             if (selectedItemChangeListener != null) {
-                selectedItemChangeListener.onItemSelectedChanged(calculateIndex());
+                int nowIndex = calculateIndex();
+                if (nowIndex != selectedIndex) {
+                    selectedIndex = nowIndex;
+                    selectedItemChangeListener.onItemSelectedChanged(calculateIndex());
+                }
             }
         }
 

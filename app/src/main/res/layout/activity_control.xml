@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -28,7 +27,7 @@
             android:id="@+id/control_loading_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="开始"/>
+            android:text="开始" />
 
         <eli.per.view.VideoLoadingView
             android:id="@+id/control_loading"
@@ -36,6 +35,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:circleColor="#aa40a8cc"
-            app:circleRadius="20"/>
+            app:circleRadius="20" />
     </FrameLayout>
 </LinearLayout>

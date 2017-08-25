@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+
 import eli.per.testlistview.R;
 
 public class VideoLoadingView extends View {
@@ -69,7 +70,7 @@ public class VideoLoadingView extends View {
         int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
 
-        //当宽高设置为内容包裹时，重新定义其大小
+        //当宽高设置为wrap_content，重新定义其大小
         if (widthSpecMode == MeasureSpec.AT_MOST) {
             widthSpecSize = (int) circleRadius * 12;
         }
@@ -89,8 +90,6 @@ public class VideoLoadingView extends View {
         circle1RadiusX = -circleRadius;
         circle2RadiusX = -circleRadius;
         circle3RadiusX = -circleRadius;
-
-        Log.i(TAG, "onMeasure: ");
     }
 
     @Override
@@ -156,7 +155,7 @@ public class VideoLoadingView extends View {
             //计算对应的延时时间
             int sleepTime = (int) (CYCLE / (circleRadius * 4 / offset1));
 
-            while(!this.isInterrupted()) {
+            while (!this.isInterrupted()) {
                 //更新视图
                 postInvalidate();
                 try {

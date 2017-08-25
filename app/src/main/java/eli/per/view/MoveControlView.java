@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
 import eli.per.data.OnVelocityStateChangeListener;
 import eli.per.data.Velocity;
 

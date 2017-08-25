@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import eli.per.data.OnSelectedItemChangeListener;
 import eli.per.data.OnVelocityStateChangeListener;
 import eli.per.data.Util;
