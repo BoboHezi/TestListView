@@ -187,7 +187,7 @@ public class ItemSelectView extends View {
                 int nowIndex = calculateIndex();
                 if (nowIndex != selectedIndex) {
                     selectedIndex = nowIndex;
-                    selectedItemChangeListener.onItemSelectedChanged(calculateIndex());
+                    selectedItemChangeListener.onItemSelectedChanged(selectedIndex);
                 }
             }
         }

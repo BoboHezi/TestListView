@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import eli.per.view.ControlDialog;
+import eli.per.view.LightSwitchView;
 import eli.per.view.VideoLoadingView;
 
 public class ControlActivity extends AppCompatActivity implements View.OnClickListener {
@@ -19,6 +20,7 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
     private Button controlLoadButton;
     private ControlDialog controlDialog;
     private VideoLoadingView videoLoadingView;
+    private LightSwitchView lightSwitch;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +42,8 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
         controlLoadButton.setOnClickListener(this);
 
         videoLoadingView = (VideoLoadingView) findViewById(R.id.control_loading);
+        lightSwitch = (LightSwitchView) findViewById(R.id.control_switch);
+        lightSwitch.setOnClickListener(this);
     }
 
     @Override
