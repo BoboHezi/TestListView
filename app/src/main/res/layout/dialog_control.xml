@@ -18,11 +18,10 @@
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:background="#00000000"
-        app:pointColor="#095954"
+        app:select_circleColor="#095954"
         app:lineColor="#09938c"
         app:textColor="#767676"
-        app:pointRadius="15"
-        app:lineHeight="4"
-        app:title="分辨率" />
+        app:select_circleRadius="15"
+        app:lineHeight="4" />
 
 </LinearLayout>

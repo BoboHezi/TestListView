@@ -53,8 +53,8 @@ public class VideoLoadingView extends View {
         super(context, attributeSet, defStyle);
         this.context = context;
         TypedArray ta = context.obtainStyledAttributes(attributeSet, R.styleable.styleable_progress_loading);
-        circleColor = ta.getColor(R.styleable.styleable_progress_loading_circleColor, 0xaa40a8cc);
-        circleRadius = ta.getFloat(R.styleable.styleable_progress_loading_circleRadius, 20);
+        circleColor = ta.getColor(R.styleable.styleable_progress_loading_loading_circleColor, 0xaa40a8cc);
+        circleRadius = ta.getFloat(R.styleable.styleable_progress_loading_loading_circleRadius, 20);
 
         paint = new Paint();
         paint.setAntiAlias(true);

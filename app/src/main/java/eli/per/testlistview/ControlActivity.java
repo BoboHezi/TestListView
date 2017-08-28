@@ -60,6 +60,8 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
                 controlLoadButton.setText("开始");
                 videoLoadingView.cancelLoading();
             }
+        } else if (view.getId() == R.id.control_switch) {
+            lightSwitch.switchLight();
         }
     }
 }
