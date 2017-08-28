@@ -113,25 +113,8 @@ public class LightSwitchView extends View {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(2);
         paint.setColor(0xffffffff);
-
-        //canvas.drawRect(leftBorder + radius / 2 + offset, baseLine - radius * 3 / 4, leftBorder + radius * 3 / 2 + offset, baseLine + radius / 4, paint);
-        /*canvas.drawArc(leftBorder + radius / 2 + offset, baseLine - radius * 3 / 4, leftBorder + radius * 3 / 2 + offset, baseLine + radius / 4, 120, 300, false, paint);
-        //Line 1
-        canvas.drawLine(leftBorder + radius * 5 / 6 + offset, baseLine - radius / 4, leftBorder + radius * 7 / 6 + offset, baseLine - radius / 4, paint);
-        //Line 2
-        canvas.drawLine(leftBorder + radius + offset, baseLine - radius / 4, leftBorder + radius + offset, baseLine + radius / 2, paint);
-        //Line 5
-        canvas.drawLine(leftBorder + offset + radius * 5 / 4, (float) (baseLine + (1.732 - 1) * radius / 4), leftBorder + offset + radius * 5 / 4, baseLine + radius * 3 / 4, paint);
-        //Line 6
-        canvas.drawLine(leftBorder + offset + radius * 3 / 4, (float) (baseLine + (1.732 - 1) * radius / 4), leftBorder + offset + radius * 3 / 4, baseLine + radius * 3 / 4, paint);
-        //Line 3
-        canvas.drawLine(leftBorder + offset + radius * 3 / 4, baseLine + radius / 2, leftBorder + offset + radius * 5 / 4, baseLine + radius / 2, paint);
-        //Line 4
-        canvas.drawLine(leftBorder + offset + radius * 3 / 4, baseLine + radius * 3 / 4, leftBorder + offset + radius * 5 / 4, baseLine + radius * 3 / 4, paint);*/
-
-        //canvas.drawRect(leftBorder + offset + radius * 2 / 3, baseLine - radius / 2, leftBorder + offset + radius * 4 / 3, baseLine + radius / 6, paint);
+        //circle
         canvas.drawArc(leftBorder + offset + radius * 2 / 3, baseLine - radius / 2, leftBorder + offset + radius * 4 / 3, baseLine + radius / 6, 120, 300, false, paint);
-
         //Line 1
         canvas.drawLine(leftBorder + offset + radius * 8 / 9, baseLine - radius / 6, leftBorder + offset + radius * 10 / 9, baseLine - radius / 6, paint);
         //Line 2
@@ -144,6 +127,7 @@ public class LightSwitchView extends View {
         canvas.drawLine(leftBorder + offset + radius * 5 / 6, baseLine + radius / 3, leftBorder + offset + radius * 7 / 6, baseLine + radius / 3, paint);
         //Line 6
         canvas.drawLine(leftBorder + offset + radius * 5 / 6, baseLine + radius / 2, leftBorder + offset + radius * 7 / 6, baseLine + radius / 2, paint);
+        //ray 1
     }
 
     /**

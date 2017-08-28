@@ -44,7 +44,7 @@
             android:layout_marginLeft="100dp"
             android:layout_gravity="center_vertical"
             app:borderWidth="0"
-            app:switch_circleRadius="50"
+            app:switch_circleRadius="100"
             app:switch_circleColor="#40a8cc"
             app:closeColor="#ffffff"
             app:openColor="#054a4e"/>
