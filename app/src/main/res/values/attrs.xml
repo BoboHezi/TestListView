@@ -20,7 +20,6 @@
         <attr name="closeColor" format="color" />
         <attr name="openColor" format="color" />
         <attr name="switch_circleRadius" format="float" />
-        <attr name="switch_circleColor" format="color" />
     </declare-styleable>
 
 </resources>

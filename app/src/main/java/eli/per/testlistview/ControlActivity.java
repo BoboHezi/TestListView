@@ -2,8 +2,10 @@ package eli.per.testlistview;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -44,6 +46,7 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
         videoLoadingView = (VideoLoadingView) findViewById(R.id.control_loading);
         lightSwitch = (LightSwitchView) findViewById(R.id.control_switch);
         lightSwitch.setOnClickListener(this);
+        lightSwitch.setSwitch(true);
     }
 
     @Override

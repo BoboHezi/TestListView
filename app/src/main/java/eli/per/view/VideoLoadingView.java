@@ -58,8 +58,6 @@ public class VideoLoadingView extends View {
 
         paint = new Paint();
         paint.setAntiAlias(true);
-
-        Log.i(TAG, "circleRadius: " + circleRadius);
     }
 
     @Override
