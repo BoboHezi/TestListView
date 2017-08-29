@@ -16,18 +16,24 @@
             android:layout_height="match_parent"
             android:background="@drawable/banner" />
 
-        <Button
-            android:id="@+id/control_show"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Control" />
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/control_loading_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="开始" />
+            <Button
+                android:id="@+id/control_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Control" />
+
+            <Button
+                android:id="@+id/control_loading_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开始" />
+        </LinearLayout>
 
         <eli.per.view.VideoLoadingView
             android:id="@+id/control_loading"
@@ -36,16 +42,5 @@
             android:layout_gravity="center"
             app:loading_circleColor="#aa40a8cc"
             app:loading_circleRadius="20" />
-
-        <eli.per.view.LightSwitchView
-            android:id="@+id/control_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:layout_gravity="center_vertical"
-            app:borderWidth="0"
-            app:switch_circleRadius="50"
-            app:closeColor="#ffffff"
-            app:openColor="#40a8cc"/>
     </FrameLayout>
 </LinearLayout>

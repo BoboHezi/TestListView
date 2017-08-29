@@ -2,26 +2,60 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:layout_weight="1"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <eli.per.view.MoveControlView
-        android:id="@+id/control_view"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:layout_width="240dp"
-        android:layout_height="120dp" />
-
-    <eli.per.view.ItemSelectView
-        android:id="@+id/control_resolution"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:background="#00000000"
-        app:select_circleColor="#095954"
-        app:lineColor="#09938c"
-        app:textColor="#767676"
-        app:select_circleRadius="15"
-        app:lineHeight="4" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
 
+        <eli.per.view.ItemSelectView
+            android:id="@+id/control_resolution"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="#00000000"
+            app:select_circleColor="#095954"
+            app:select_lineColor="#09938c"
+            app:select_textColor="#767676"
+            app:select_circleRadius="15"
+            app:select_lineHeight="4" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <eli.per.view.LightSwitchView
+            android:id="@+id/control_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#00000000"
+            app:switch_borderWidth="0"
+            app:switch_circleRadius="50"
+            app:switch_closeColor="#ffffff"
+            app:switch_openColor="#40a8cc"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <eli.per.view.MoveControlView
+            android:id="@+id/control_view"
+            android:layout_width="240dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:background="#00000000"
+            app:control_borderlineColor="#01514d"
+            app:control_pointColor="#40a8cc"/>
+    </LinearLayout>
 </LinearLayout>

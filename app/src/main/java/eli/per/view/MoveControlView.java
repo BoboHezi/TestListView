@@ -1,30 +1,30 @@
 package eli.per.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-
 import eli.per.data.OnVelocityStateChangeListener;
 import eli.per.data.Velocity;
+import eli.per.testlistview.R;
 
 public class MoveControlView extends View {
 
     private static final String TAG = "MoveControlView";
-    //背景颜色
-    private static final int BACK_COLOR = 0x77000000;
+    private Context context;
     //描边颜色
-    private static final int BORDER_LINE_COLOR = 0xff000000;
-    //原点颜色
-    private static final int CIRCLE_COLOR = 0xff000000;
+    private int borderLineColor;
+    //圆点颜色
+    private int pointColor;
     //字体颜色
-    private static final int TEXT_COLOR = 0xff000000;
+    private int textColor;
     //画笔宽度
-    private static final int STROKE_WIDTH = 3;
+    private float strokeWidth;
     //圆点半径
-    private static final int POINT_RADIUS = 30;
+    private float pointRadius;
     //偏移距离
     private static final float OFFSET_PIX = 5;
 
@@ -63,9 +63,24 @@ public class MoveControlView extends View {
 
     public MoveControlView(Context context, AttributeSet attributeSet, int defStyle) {
         super(context, attributeSet, defStyle);
+        this.context = context;
         paint = new Paint();
         paint.setAntiAlias(true);
         velocity = new Velocity(0, Velocity.Direction.front);
+
+        TypedArray ta = context.obtainStyledAttributes(attributeSet, R.styleable.styleable_move_control);
+        borderLineColor = ta.getColor(R.styleable.styleable_move_control_control_borderlineColor, 0xff000000);
+        pointColor = ta.getColor(R.styleable.styleable_move_control_control_pointColor, 0xff000000);
+        textColor = ta.getColor(R.styleable.styleable_move_control_control_textColor, 0xff000000);
+        strokeWidth = ta.getFloat(R.styleable.styleable_move_control_control_strokeWidth, 3);
+        pointRadius = ta.getFloat(R.styleable.styleable_move_control_control_pointRadius, 30);
+        ta.recycle();
+
+        this.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
     }
 
     /**
@@ -79,7 +94,21 @@ public class MoveControlView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        //获取组件窗口模式和大小
+        int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        //当宽高设置为wrap_content，重新定义其大小
+        if (widthSpecMode == MeasureSpec.AT_MOST) {
+            widthSpecSize = (int) (pointRadius * 22);
+        }
+        if (heightSpecMode == MeasureSpec.AT_MOST) {
+            heightSpecSize = widthSpecSize / 2;
+        }
+        setMeasuredDimension(widthSpecSize, heightSpecSize);
+
         //获取当前组件宽高
         width = getMeasuredWidth();
         height = getMeasuredHeight();
@@ -100,24 +129,32 @@ public class MoveControlView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        paint.setColor(TEXT_COLOR);
-        paint.setStrokeWidth(STROKE_WIDTH);
-        paint.setTextSize(30);
-        paint.setTextAlign(Paint.Align.LEFT);
+        //计算方向和速度
+        calculate();
+
         //绘制文字
-        canvas.drawText(calculate(), 0, 30, paint);
-
-        paint.setColor(CIRCLE_COLOR);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(STROKE_WIDTH);
-
-        //绘制边线
-        canvas.drawCircle(width / 2, height, height - STROKE_WIDTH, paint);
-        canvas.drawLine(STROKE_WIDTH, height - STROKE_WIDTH / 2, width - STROKE_WIDTH, height - STROKE_WIDTH / 2, paint);
+        String speedText = velocity.getSpeed() + ":速度";
+        String directionText = "方向:" + velocity.getDirection();
+        paint.setColor(textColor);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTextSize(30);
+        //书写速度
+        paint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(directionText, 0, 30, paint);
+        //书写方向
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText(speedText, width, 30, paint);
 
         //绘制圆点
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(radiusX, radiusY, POINT_RADIUS, paint);
+        paint.setColor(pointColor);
+        canvas.drawCircle(radiusX, radiusY, pointRadius, paint);
+
+        //绘制边线
+        paint.setColor(borderLineColor);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(strokeWidth);
+        canvas.drawCircle(width / 2, height, height - strokeWidth, paint);
+        canvas.drawLine(strokeWidth, height - strokeWidth / 2, width - strokeWidth, height - strokeWidth / 2, paint);
     }
 
     @Override
@@ -131,7 +168,7 @@ public class MoveControlView extends View {
         float distance = (float) Math.sqrt((touchX - defaultRadiusX) * (touchX - defaultRadiusX) + (touchY - defaultRadiusY) * (touchY - defaultRadiusY));
 
         //当距离大于大圆的半径时，重新计算坐标
-        if ((distance + POINT_RADIUS) > height) {
+        if ((distance + pointRadius) > height) {
 
             //X，Y偏移
             float offsetX = height - touchX;
@@ -142,8 +179,8 @@ public class MoveControlView extends View {
             float sin = offsetY / distance;
 
             //触点与圆心的连线，和圆弧的交点的位置
-            float pointX = height - (height - (POINT_RADIUS + STROKE_WIDTH)) * cos;
-            float pointY = height - (height - (POINT_RADIUS + STROKE_WIDTH)) * sin;
+            float pointX = height - (height - (pointRadius + strokeWidth)) * cos;
+            float pointY = height - (height - (pointRadius + strokeWidth)) * sin;
 
             //定义圆点的位置
             radiusX = pointX;
@@ -187,7 +224,7 @@ public class MoveControlView extends View {
     /**
      * 计算位移和角度
      */
-    private String calculate() {
+    private void calculate() {
         //及计算触点和中心点的距离
         offset = (float) Math.sqrt((radiusX - defaultRadiusX) * (radiusX - defaultRadiusX) + (radiusY - defaultRadiusY) * (radiusY - defaultRadiusY));
         //计算正弦值
@@ -199,7 +236,7 @@ public class MoveControlView extends View {
             angle = (float) ((Math.PI / 2 - Math.asin(cos)) / Math.PI * 180);
         }
         //计算对应的速度
-        int speed = (int) (offset / (height - POINT_RADIUS) * 15);
+        int speed = (int) (offset / (height - pointRadius) * 15);
         Velocity.Direction direction = Velocity.Direction.front;
         //计算方向
         if (angle > 0 && angle < 70) {
@@ -218,8 +255,6 @@ public class MoveControlView extends View {
             if (backThread == null && velocityStateChangedListener != null)
                 velocityStateChangedListener.onVelocityStateChanged(velocity);
         }
-
-        return "Angle: " + angle;
     }
 
     /**

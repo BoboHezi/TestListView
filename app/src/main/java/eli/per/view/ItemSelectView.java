@@ -64,12 +64,18 @@ public class ItemSelectView extends View {
         selectItems = new ArrayList<>();
         //获取配置值
         TypedArray ta = context.obtainStyledAttributes(attributeSet, R.styleable.styleable_item_select);
-        lineColor = ta.getColor(R.styleable.styleable_item_select_lineColor, 0xff777777);
+        lineColor = ta.getColor(R.styleable.styleable_item_select_select_lineColor, 0xff777777);
         pointColor = ta.getColor(R.styleable.styleable_item_select_select_circleColor, 0xff000000);
-        textColor = ta.getColor(R.styleable.styleable_item_select_textColor, 0xff000000);
-        lineHeight = ta.getInt(R.styleable.styleable_item_select_lineHeight, 5);
+        textColor = ta.getColor(R.styleable.styleable_item_select_select_textColor, 0xff000000);
+        lineHeight = ta.getInt(R.styleable.styleable_item_select_select_lineHeight, 5);
         pointRadius = ta.getInt(R.styleable.styleable_item_select_select_circleRadius, 10);
         ta.recycle();
+
+        this.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
     }
 
     @Override
@@ -82,6 +88,9 @@ public class ItemSelectView extends View {
         offset = windowHeight / 6;
         //设置圆点坐标的Y值，固定
         pointRadiusY = windowHeight / 2 + offset;
+        //重置坐标
+        float pieceWidth = windowWidth / selectItems.size();
+        pointRadiusX = selectedIndex * pieceWidth + pieceWidth / 2;
     }
 
     /**
@@ -128,8 +137,9 @@ public class ItemSelectView extends View {
      * @param index
      */
     public void setIndex(int index) {
+        selectedIndex = index;
         float pieceWidth = windowWidth / selectItems.size();
-        pointRadiusX = index * pieceWidth + pieceWidth / 2;
+        pointRadiusX = selectedIndex * pieceWidth + pieceWidth / 2;
         postInvalidate();
     }
 

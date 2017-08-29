@@ -4,27 +4,25 @@ import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import eli.per.data.OnSelectedItemChangeListener;
 import eli.per.data.OnVelocityStateChangeListener;
 import eli.per.data.Util;
 import eli.per.data.Velocity;
 import eli.per.testlistview.R;
 
-public class ControlDialog extends Dialog implements View.OnClickListener, OnSelectedItemChangeListener, OnVelocityStateChangeListener {
+public class ControlDialog extends Dialog implements OnSelectedItemChangeListener, OnVelocityStateChangeListener {
 
     private static final String TAG = "ControlDialog";
     private Context context;
 
-    private MoveControlView moveControlView;
     private ItemSelectView itemSelectView;
+    private LightSwitchView lightSwitchView;
+    private MoveControlView moveControlView;
 
     List<String> items;
 
@@ -38,12 +36,11 @@ public class ControlDialog extends Dialog implements View.OnClickListener, OnSel
         setContentView(R.layout.dialog_control);
         getWindow().setWindowAnimations(R.style.control_dialog_anim);
         setCanceledOnTouchOutside(true);
-        moveControlView = findViewById(R.id.control_view);
-        itemSelectView = findViewById(R.id.control_resolution);
 
-        moveControlView.setOnClickListener(this);
+        moveControlView = findViewById(R.id.control_view);
         moveControlView.setOnVelocityStateChangedListener(this);
-        itemSelectView.setOnClickListener(this);
+
+        itemSelectView = findViewById(R.id.control_resolution);
         itemSelectView.setOnSelectedItemChangeListener(this);
 
         items = new ArrayList<>();
@@ -52,6 +49,9 @@ public class ControlDialog extends Dialog implements View.OnClickListener, OnSel
         items.add("720");
         items.add("1080");
         itemSelectView.setSelectItems(items);
+
+        lightSwitchView = findViewById(R.id.control_switch);
+        lightSwitchView.setSwitch(true);
     }
 
     @Override
@@ -66,11 +66,6 @@ public class ControlDialog extends Dialog implements View.OnClickListener, OnSel
         lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
         lp.gravity = Gravity.LEFT;
         window.setAttributes(lp);
-    }
-
-    @Override
-    public void onClick(View view) {
-
     }
 
     @Override

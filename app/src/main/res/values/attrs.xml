@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <declare-styleable name="styleable_move_control">
+        <attr name="control_borderlineColor" format="color"/>
+        <attr name="control_pointColor" format="color"/>
+        <attr name="control_pointRadius" format="float"/>
+        <attr name="control_textColor" format="color"/>
+        <attr name="control_strokeWidth" format="integer"/>
+    </declare-styleable>
+
     <declare-styleable name="styleable_item_select">
-        <attr name="lineColor" format="color" />
+        <attr name="select_lineColor" format="color" />
         <attr name="select_circleColor" format="color" />
-        <attr name="textColor" format="color" />
-        <attr name="lineHeight" format="integer" />
+        <attr name="select_textColor" format="color" />
+        <attr name="select_lineHeight" format="integer" />
         <attr name="select_circleRadius" format="integer" />
     </declare-styleable>
 
@@ -15,10 +23,10 @@
     </declare-styleable>
 
     <declare-styleable name="styleable_light_switch">
-        <attr name="borderWidth" format="float" />
-        <attr name="borderColor" format="color" />
-        <attr name="closeColor" format="color" />
-        <attr name="openColor" format="color" />
+        <attr name="switch_borderWidth" format="float" />
+        <attr name="switch_borderColor" format="color" />
+        <attr name="switch_closeColor" format="color" />
+        <attr name="switch_openColor" format="color" />
         <attr name="switch_circleRadius" format="float" />
     </declare-styleable>
 
