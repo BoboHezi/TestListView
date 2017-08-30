@@ -7,7 +7,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import eli.per.data.OnVelocityStateChangeListener;
+
+import eli.per.data.OnControlStateChangeListener;
 import eli.per.data.Velocity;
 import eli.per.testlistview.R;
 
@@ -49,7 +50,7 @@ public class MoveControlView extends View {
     //方向
     private Velocity velocity;
     //速度值改变的接口
-    private OnVelocityStateChangeListener velocityStateChangedListener;
+    private OnControlStateChangeListener changeListener;
     //退回中心点的线程
     private BackToPoint backThread;
 
@@ -86,10 +87,10 @@ public class MoveControlView extends View {
     /**
      * 设置速度变化监听
      *
-     * @param velocityStateChangedListener
+     * @param changedListener
      */
-    public void setOnVelocityStateChangedListener(OnVelocityStateChangeListener velocityStateChangedListener) {
-        this.velocityStateChangedListener = velocityStateChangedListener;
+    public void setOnControlStateChangedListener(OnControlStateChangeListener changedListener) {
+        this.changeListener = changedListener;
     }
 
     @Override
@@ -252,8 +253,8 @@ public class MoveControlView extends View {
             velocity.setDirection(direction);
             velocity.setSpeed(speed);
 
-            if (backThread == null && velocityStateChangedListener != null)
-                velocityStateChangedListener.onVelocityStateChanged(velocity);
+            if (backThread == null && changeListener != null)
+                changeListener.onVelocityStateChanged(velocity);
         }
     }
 
@@ -267,8 +268,8 @@ public class MoveControlView extends View {
                 //当圆点和中心点距离小于10.或者线程被中断时，退出循环
                 if (offset <= OFFSET_PIX * 2 || this.isInterrupted()) {
                     //退出循环之前调用状态改变的接口
-                    if (velocityStateChangedListener != null) {
-                        velocityStateChangedListener.onVelocityStateChanged(new Velocity(0, Velocity.Direction.front));
+                    if (changeListener != null) {
+                        changeListener.onVelocityStateChanged(new Velocity(0, Velocity.Direction.front));
                     }
                     break;
                 }

@@ -9,7 +9,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
-import eli.per.data.OnSelectedItemChangeListener;
+
+import eli.per.data.OnControlStateChangeListener;
 import eli.per.testlistview.R;
 
 public class ItemSelectView extends View {
@@ -41,7 +42,7 @@ public class ItemSelectView extends View {
     //被选择的index
     private int selectedIndex;
     //选择条目改变接口
-    private OnSelectedItemChangeListener selectedItemChangeListener;
+    private OnControlStateChangeListener changeListener;
 
     private Context context;
     private Paint paint;
@@ -96,10 +97,10 @@ public class ItemSelectView extends View {
     /**
      * 设置选择条目变化监听
      *
-     * @param selectedItemChangeListener
+     * @param changeListener
      */
-    public void setOnSelectedItemChangeListener(OnSelectedItemChangeListener selectedItemChangeListener) {
-        this.selectedItemChangeListener = selectedItemChangeListener;
+    public void setOnControlStateChangeListener(OnControlStateChangeListener changeListener) {
+        this.changeListener = changeListener;
     }
 
     /**
@@ -193,11 +194,11 @@ public class ItemSelectView extends View {
             float pieceWidth = windowWidth / selectItems.size();
             int index = calculateIndex();
             pointRadiusX = index * pieceWidth + pieceWidth / 2;
-            if (selectedItemChangeListener != null) {
+            if (changeListener != null) {
                 int nowIndex = calculateIndex();
                 if (nowIndex != selectedIndex) {
                     selectedIndex = nowIndex;
-                    selectedItemChangeListener.onItemSelectedChanged(selectedIndex);
+                    changeListener.onItemSelectedChanged(selectedIndex);
                 }
             }
         }

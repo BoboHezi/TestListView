@@ -9,13 +9,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import java.util.ArrayList;
 import java.util.List;
-import eli.per.data.OnSelectedItemChangeListener;
-import eli.per.data.OnVelocityStateChangeListener;
+import eli.per.data.OnControlStateChangeListener;
 import eli.per.data.Util;
 import eli.per.data.Velocity;
 import eli.per.testlistview.R;
 
-public class ControlDialog extends Dialog implements OnSelectedItemChangeListener, OnVelocityStateChangeListener {
+public class ControlDialog extends Dialog implements OnControlStateChangeListener {
 
     private static final String TAG = "ControlDialog";
     private Context context;
@@ -38,10 +37,10 @@ public class ControlDialog extends Dialog implements OnSelectedItemChangeListene
         setCanceledOnTouchOutside(true);
 
         moveControlView = findViewById(R.id.control_view);
-        moveControlView.setOnVelocityStateChangedListener(this);
+        moveControlView.setOnControlStateChangedListener(this);
 
         itemSelectView = findViewById(R.id.control_resolution);
-        itemSelectView.setOnSelectedItemChangeListener(this);
+        itemSelectView.setOnControlStateChangeListener(this);
 
         items = new ArrayList<>();
         items.add("0");
