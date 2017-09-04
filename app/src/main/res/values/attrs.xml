@@ -30,4 +30,8 @@
         <attr name="switch_circleRadius" format="float" />
     </declare-styleable>
 
+    <declare-styleable name="styleable_view_rate">
+        <attr name="rate_paintColor" format="color"/>
+    </declare-styleable>
+
 </resources>
