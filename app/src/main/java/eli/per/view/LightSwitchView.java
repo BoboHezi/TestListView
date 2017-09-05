@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import eli.per.data.OnControlStateChangeListener;
 import eli.per.testlistview.R;
 
 public class LightSwitchView extends View {
@@ -37,6 +38,8 @@ public class LightSwitchView extends View {
     private float leftBorder;
     //开关状态
     private boolean isOpen = false;
+    //开关改变的接口
+    private OnControlStateChangeListener changeListener;
 
     public LightSwitchView(Context context) {
         this(context, null);
@@ -67,6 +70,10 @@ public class LightSwitchView extends View {
                 //运行动画
                 isOpen = !isOpen;
                 new SwitchAnimationThread().start();
+
+                if (changeListener != null) {
+                    changeListener.onSwitchStateChanged(isOpen);
+                }
             }
         });
     }
@@ -247,6 +254,15 @@ public class LightSwitchView extends View {
         }
         this.isOpen = isOpen;
         postInvalidate();
+    }
+
+    /**
+     * 设置开关变化监听
+     *
+     * @param changedListener
+     */
+    public void setOnControlStateChangedListener(OnControlStateChangeListener changedListener) {
+        this.changeListener = changedListener;
     }
 
     /**

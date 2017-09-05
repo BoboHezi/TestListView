@@ -8,4 +8,6 @@ public interface OnControlStateChangeListener {
     void onItemSelectedChanged(int index);
 
     void onVelocityStateChanged(Velocity velocity);
+
+    void onSwitchStateChanged(boolean isOpen);
 }
