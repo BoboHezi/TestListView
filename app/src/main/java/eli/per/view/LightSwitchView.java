@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
+
 import eli.per.testlistview.R;
 
 public class LightSwitchView extends View {
@@ -136,6 +137,7 @@ public class LightSwitchView extends View {
 
     /**
      * 获取渐变色
+     *
      * @param scale
      * @return
      */
@@ -170,6 +172,7 @@ public class LightSwitchView extends View {
 
     /**
      * 绘制灯
+     *
      * @param canvas
      */
     private void drawLight(Canvas canvas, float scale) {
@@ -196,6 +199,7 @@ public class LightSwitchView extends View {
 
     /**
      * 绘制光线
+     *
      * @param canvas
      */
     private void drawRay(Canvas canvas) {
@@ -204,19 +208,20 @@ public class LightSwitchView extends View {
         paint.setStrokeWidth(2);
         paint.setColor(openColor);
         //ray 1
-        canvas.drawLine((float) (leftBorder + offset + radius * (1 - 1 / 1.732)), baseLine + radius / 6, (float)(leftBorder + offset + radius * (1 - 2 / (3 * 1.732))), baseLine + radius / 18, paint);
+        canvas.drawLine((float) (leftBorder + offset + radius * (1 - 1 / 1.732)), baseLine + radius / 6, (float) (leftBorder + offset + radius * (1 - 2 / (3 * 1.732))), baseLine + radius / 18, paint);
         //ray 2
-        canvas.drawLine((float) (leftBorder + offset + radius * (1 - 1 / 1.732)), baseLine - radius / 3, (float)(leftBorder + offset + radius * (1 - 2 / (3 * 1.732))), baseLine - radius * 5 / 18, paint);
+        canvas.drawLine((float) (leftBorder + offset + radius * (1 - 1 / 1.732)), baseLine - radius / 3, (float) (leftBorder + offset + radius * (1 - 2 / (3 * 1.732))), baseLine - radius * 5 / 18, paint);
         //ray 3
         canvas.drawLine(leftBorder + offset + radius, baseLine - radius * 5 / 6, leftBorder + offset + radius, baseLine - radius * 11 / 18, paint);
         //ray 4
-        canvas.drawLine((float) (leftBorder + offset + radius * (1 + 1 / 1.732)), baseLine - radius / 3, (float)(leftBorder + offset + radius * (1 + 2 / (3 * 1.732))), baseLine - radius * 5 / 18, paint);
+        canvas.drawLine((float) (leftBorder + offset + radius * (1 + 1 / 1.732)), baseLine - radius / 3, (float) (leftBorder + offset + radius * (1 + 2 / (3 * 1.732))), baseLine - radius * 5 / 18, paint);
         //ray 5
-        canvas.drawLine((float) (leftBorder + offset + radius * (1 + 1 / 1.732)), baseLine + radius / 6, (float)(leftBorder + offset + radius * (1 + 2 / (3 * 1.732))), baseLine + radius / 18, paint);
+        canvas.drawLine((float) (leftBorder + offset + radius * (1 + 1 / 1.732)), baseLine + radius / 6, (float) (leftBorder + offset + radius * (1 + 2 / (3 * 1.732))), baseLine + radius / 18, paint);
     }
 
     /**
      * 判断是否处于开启状态
+     *
      * @return
      */
     public boolean isOpen() {
@@ -231,6 +236,7 @@ public class LightSwitchView extends View {
 
     /**
      * 设置开关状态
+     *
      * @param isOpen
      */
     public void setSwitch(boolean isOpen) {
@@ -249,15 +255,14 @@ public class LightSwitchView extends View {
     private class SwitchAnimationThread extends Thread {
         @Override
         public void run() {
-            while(true) {
+            while (true) {
                 postInvalidate();
                 if (isOpen) {
                     //打开状态下，偏移逐渐增大
-                    offset ++ ;
-                }
-                else {
+                    offset++;
+                } else {
                     //关闭状态下，偏移逐渐减小
-                    offset --;
+                    offset--;
                 }
 
                 //当偏移到达两端，结束线程
@@ -271,7 +276,8 @@ public class LightSwitchView extends View {
                 }
                 try {
                     Thread.sleep(1);
-                } catch (InterruptedException e) { }
+                } catch (InterruptedException e) {
+                }
             }
         }
     }

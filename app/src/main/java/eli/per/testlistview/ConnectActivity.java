@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import eli.per.thread.TestCommand;
 
 public class ConnectActivity extends AppCompatActivity implements View.OnClickListener {

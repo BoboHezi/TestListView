@@ -45,16 +45,19 @@
 
         <eli.per.view.NetWorkSpeedView
             android:id="@+id/control_rate"
-            android:layout_width="100dp"
+            android:layout_width="130dp"
             android:layout_height="30dp"
             app:rate_paintColor="#0e7e67"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="100dp"/>
+            android:layout_marginLeft="100dp" />
 
         <eli.per.view.RSSIView
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-            android:layout_marginLeft="200dp"
-            android:layout_gravity="center_vertical"/>
+            android:id="@+id/control_rssi"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="300dp"
+            android:layout_gravity="center_vertical"
+            app:rssi_lineColor="#0e7e67"
+            app:rssi_textColor="#0e7e67" />
     </FrameLayout>
 </LinearLayout>

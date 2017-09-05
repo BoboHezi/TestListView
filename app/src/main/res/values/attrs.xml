@@ -2,11 +2,11 @@
 <resources>
 
     <declare-styleable name="styleable_move_control">
-        <attr name="control_borderlineColor" format="color"/>
-        <attr name="control_pointColor" format="color"/>
-        <attr name="control_pointRadius" format="float"/>
-        <attr name="control_textColor" format="color"/>
-        <attr name="control_strokeWidth" format="integer"/>
+        <attr name="control_borderlineColor" format="color" />
+        <attr name="control_pointColor" format="color" />
+        <attr name="control_pointRadius" format="float" />
+        <attr name="control_textColor" format="color" />
+        <attr name="control_strokeWidth" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="styleable_item_select">
@@ -31,7 +31,12 @@
     </declare-styleable>
 
     <declare-styleable name="styleable_view_rate">
-        <attr name="rate_paintColor" format="color"/>
+        <attr name="rate_paintColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="styleable_view_rssi">
+        <attr name="rssi_lineColor" format="color" />
+        <attr name="rssi_textColor" format="color" />
     </declare-styleable>
 
 </resources>

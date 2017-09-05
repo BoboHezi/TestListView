@@ -7,8 +7,10 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import eli.per.data.OnControlStateChangeListener;
 import eli.per.data.Util;
 import eli.per.data.Velocity;

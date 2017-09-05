@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
+
 import eli.per.testlistview.R;
 
 public class VideoLoadingView extends View {

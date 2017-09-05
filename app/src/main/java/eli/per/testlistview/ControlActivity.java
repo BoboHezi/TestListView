@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -14,6 +13,7 @@ import android.widget.Button;
 import eli.per.thread.ReadInfoThread;
 import eli.per.view.ControlDialog;
 import eli.per.view.NetWorkSpeedView;
+import eli.per.view.RSSIView;
 import eli.per.view.VideoLoadingView;
 
 public class ControlActivity extends AppCompatActivity implements View.OnClickListener {
@@ -26,6 +26,7 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
     private ControlDialog controlDialog;
     private VideoLoadingView videoLoadingView;
     private NetWorkSpeedView netWorkSpeedView;
+    private RSSIView rssiView;
 
     private RefreshInfoHandler refreshInfoHandler;
 
@@ -54,6 +55,8 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
         videoLoadingView = (VideoLoadingView) findViewById(R.id.control_loading);
 
         netWorkSpeedView = (NetWorkSpeedView) findViewById(R.id.control_rate);
+
+        rssiView = (RSSIView) findViewById(R.id.control_rssi);
     }
 
     @Override
@@ -84,6 +87,7 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
                 int rssi = msg.getData().getInt("RSSI");
                 //Log.i(TAG, "Speed: " + rate + "\tRSSI: " + rssi);
                 netWorkSpeedView.setSpeed((int) rate);
+                rssiView.setRssi(rssi);
             }
         }
     }

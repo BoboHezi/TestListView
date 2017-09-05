@@ -40,7 +40,7 @@
             app:switch_borderWidth="0"
             app:switch_circleRadius="50"
             app:switch_closeColor="#ffffff"
-            app:switch_openColor="#40a8cc"/>
+            app:switch_openColor="#40a8cc" />
     </LinearLayout>
 
     <LinearLayout
@@ -56,6 +56,6 @@
             android:layout_gravity="center"
             android:background="#00000000"
             app:control_borderlineColor="#01514d"
-            app:control_pointColor="#40a8cc"/>
+            app:control_pointColor="#40a8cc" />
     </LinearLayout>
 </LinearLayout>

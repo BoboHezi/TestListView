@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
+
 import eli.per.data.Util;
 import eli.per.testlistview.R;
 
@@ -30,6 +31,13 @@ public class NetWorkSpeedView extends View {
     private float speed;
     //更新动画线程
     private TransitionThread transitionThread;
+
+    //圆半径
+    private float radius;
+    //画笔宽度
+    private float lineWidth;
+    //圆点半径
+    private float pointRadius;
 
     public NetWorkSpeedView(Context context) {
         this(context, null);
@@ -62,25 +70,25 @@ public class NetWorkSpeedView extends View {
 
         //当宽高设置为wrap_content，重新定义其大小
         if (widthSpecMode == MeasureSpec.AT_MOST) {
-            widthSpecSize = Util.dip2px(context, 50);
+            widthSpecSize = Util.dip2px(context, 130);
         }
         if (heightSpecMode == MeasureSpec.AT_MOST) {
-            heightSpecSize = Util.dip2px(context, 20);
+            heightSpecSize = Util.dip2px(context, 30);
         }
         setMeasuredDimension(widthSpecSize, heightSpecSize);
 
         //获取组件高度
         viewHeight = getMeasuredHeight();
+        //计算圆半径
+        radius = (float) (viewHeight / (1 + Math.sin(45 * Math.PI / 180)));
+        //计算画笔宽度
+        lineWidth = radius / 15;
+        //计算圆点半径
+        pointRadius = radius / 10;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        //计算圆半径
-        float radius = (float) (viewHeight / (1 + Math.sin(45 * Math.PI / 180)));
-        //计算画笔宽度
-        float lineWidth = radius / 15;
-        //计算圆点半径
-        float pointRadius = radius / 10;
         //角度
         int angle;
 
@@ -112,13 +120,14 @@ public class NetWorkSpeedView extends View {
 
         //绘制文本
         String text = speed + " kb/s";
-        paint.setTextSize(radius / 2);
-        float textHeight =  -(paint.descent() + paint.ascent());
-        canvas.drawText(text, (float) (radius * 2.5), radius + textHeight / 2, paint);
+        paint.setTextSize(viewHeight / 2);
+        float textHeight = -(paint.descent() + paint.ascent());
+        canvas.drawText(text, (float) (radius * 2.5), (viewHeight + textHeight) / 2, paint);
     }
 
     /**
      * 设置当前网速
+     *
      * @param speed
      */
     public void setSpeed(float speed) {
@@ -150,17 +159,17 @@ public class NetWorkSpeedView extends View {
                 return;
             }
             //计算每次应该延时的时间，确保每次更新用事1.7秒
-            int delay = (int) (1700 / Math.abs(nowSpeed - speed));
+            int delay = (int) (700 / Math.abs(nowSpeed - speed) * 10);
             //判断是增大还是减小
             int offset = (nowSpeed > speed) ? 1 : -1;
 
             //循环更新视图
             while (nowSpeed != speed && !this.isInterrupted()) {
-                if (Math.abs(nowSpeed - speed) <= 5) {
+                if (Math.abs(nowSpeed - speed) <= 10) {
                     speed = nowSpeed;
                 }
                 //偏移一个数值
-                speed += offset;
+                speed += (offset * 10);
                 //更新视图
                 postInvalidate();
                 try {
