@@ -33,6 +33,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="开始" />
+
+            <Button
+                android:id="@+id/control_wifi_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="wifi"/>
         </LinearLayout>
 
         <eli.per.view.VideoLoadingView
@@ -42,22 +48,5 @@
             android:layout_gravity="center"
             app:loading_circleColor="#aa40a8cc"
             app:loading_circleRadius="20" />
-
-        <eli.per.view.NetWorkSpeedView
-            android:id="@+id/control_rate"
-            android:layout_width="130dp"
-            android:layout_height="30dp"
-            app:rate_paintColor="#0e7e67"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="100dp" />
-
-        <eli.per.view.RSSIView
-            android:id="@+id/control_rssi"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="300dp"
-            android:layout_gravity="center_vertical"
-            app:rssi_lineColor="#0e7e67"
-            app:rssi_textColor="#0e7e67" />
     </FrameLayout>
 </LinearLayout>

@@ -52,7 +52,7 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
         if (view.getId() == R.id.connect_start_button) {
             //创建连接
             if (testCommand != null && !testCommand.isConnected()) {
-                String value = (dataInput.getText().toString()).equals("") ? "154" : dataInput.getText().toString();
+                String value = (dataInput.getText().toString()).equals("") ? "0" : dataInput.getText().toString();
                 commandData = Integer.parseInt(value);
                 testCommand.connect(host, port, commandData);
             }

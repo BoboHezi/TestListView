@@ -12,9 +12,8 @@ import android.widget.Button;
 
 import eli.per.thread.ReadInfoThread;
 import eli.per.view.ControlDialog;
-import eli.per.view.NetWorkSpeedView;
-import eli.per.view.RSSIView;
 import eli.per.view.VideoLoadingView;
+import eli.per.view.WifiStatusDialog;
 
 public class ControlActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -23,21 +22,20 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
 
     private Button controlButton;
     private Button controlLoadButton;
+    private Button wifiButton;
     private ControlDialog controlDialog;
     private VideoLoadingView videoLoadingView;
-    private NetWorkSpeedView netWorkSpeedView;
-    private RSSIView rssiView;
 
     private RefreshInfoHandler refreshInfoHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+/*
         //设置全屏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //设置横屏
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);*/
 
         setContentView(R.layout.activity_control);
         initView();
@@ -54,9 +52,8 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
 
         videoLoadingView = (VideoLoadingView) findViewById(R.id.control_loading);
 
-        netWorkSpeedView = (NetWorkSpeedView) findViewById(R.id.control_rate);
-
-        rssiView = (RSSIView) findViewById(R.id.control_rssi);
+        wifiButton = (Button) findViewById(R.id.control_wifi_button);
+        wifiButton.setOnClickListener(this);
     }
 
     @Override
@@ -73,6 +70,8 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
                 controlLoadButton.setText("开始");
                 videoLoadingView.cancelLoading();
             }
+        } else if (view.getId() == R.id.control_wifi_button) {
+            new WifiStatusDialog(this).show();
         }
     }
 
@@ -86,8 +85,6 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
                 float rate = msg.getData().getFloat("RATE");
                 int rssi = msg.getData().getInt("RSSI");
                 //Log.i(TAG, "Speed: " + rate + "\tRSSI: " + rssi);
-                netWorkSpeedView.setSpeed((int) rate);
-                rssiView.setRssi(rssi);
             }
         }
     }

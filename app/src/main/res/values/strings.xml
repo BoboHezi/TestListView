@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TestListView</string>
+    <string name="waring_wifi_disconnect">无线网未连接</string>
 </resources>

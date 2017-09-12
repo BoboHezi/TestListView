@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorGray">#aaaaaa</color>
+    <color name="colorLightGray">#eeeeee</color>
+    <color name="colorDark">#202020</color>
+    <color name="colorPurple">#610e8e</color>
+    <color name="colorGreenLight">#10b193</color>
+    <color name="colorTextWarning">#de0000</color>
 </resources>
