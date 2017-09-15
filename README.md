@@ -4,6 +4,4 @@ Test object,include listview,connect and control view.<br>
 * Corporation: UBI-TEK<br>
 ![](https://github.com/BoboHezi/TestListView/raw/master/app/src/main/res/drawable/banner.png)<br>
 
-===========================<br>
-
 ****
