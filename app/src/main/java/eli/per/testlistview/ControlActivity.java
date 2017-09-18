@@ -1,15 +1,21 @@
 package eli.per.testlistview;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.icu.text.DecimalFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
+import eli.per.server.LocateListener;
 import eli.per.thread.ReadInfoThread;
 import eli.per.view.ControlDialog;
 import eli.per.view.VideoLoadingView;
@@ -18,30 +24,33 @@ import eli.per.view.WifiStatusDialog;
 public class ControlActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "ControlActivity";
-    public static final int HANDLER_INFO = 1;
+    public static final int HANDLER_WIFI_AND_NET_INFO = 1;
+    public static final int HANDLER_GET_POSITION = 2;
 
     private Button controlButton;
     private Button controlLoadButton;
     private Button wifiButton;
     private ControlDialog controlDialog;
     private VideoLoadingView videoLoadingView;
+    private TextView locationInfoText;
 
     private RefreshInfoHandler refreshInfoHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-/*
+
         //设置全屏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //设置横屏
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);*/
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 
         setContentView(R.layout.activity_control);
         initView();
 
         refreshInfoHandler = new RefreshInfoHandler();
         new ReadInfoThread(this, refreshInfoHandler).start();
+        new LocateListener(this, refreshInfoHandler);
     }
 
     private void initView() {
@@ -54,6 +63,8 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
 
         wifiButton = (Button) findViewById(R.id.control_wifi_button);
         wifiButton.setOnClickListener(this);
+
+        locationInfoText = (TextView) findViewById(R.id.control_location_info);
     }
 
     @Override
@@ -79,13 +90,45 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
      * 更新显示信息的Handler
      */
     public class RefreshInfoHandler extends Handler {
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == HANDLER_INFO) {
+            if (msg.what == HANDLER_WIFI_AND_NET_INFO) {
                 float rate = msg.getData().getFloat("RATE");
                 int rssi = msg.getData().getInt("RSSI");
                 //Log.i(TAG, "Speed: " + rate + "\tRSSI: " + rssi);
+            } else if (msg.what == HANDLER_GET_POSITION) {
+                double latitude = msg.getData().getDouble("latitude");
+                double longitude = msg.getData().getDouble("longitude");
+
+                setLocationInfoText(latitude, longitude);
             }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void setLocationInfoText(double latitude, double longitude) {
+        if (locationInfoText != null) {
+            String text;
+            if (latitude >= 0) {
+                text = "北纬: ";
+            } else {
+                text = "南纬: ";
+                latitude = Math.abs(latitude);
+            }
+
+            text += latitude/*new DecimalFormat("0.00").format(latitude)*/;
+            text += "    ";
+
+            if (longitude >= 0) {
+                text += "东经: ";
+            } else {
+                text += "西经: ";
+                longitude = Math.abs(longitude);
+            }
+
+            text += longitude/*new DecimalFormat("0.00").format(longitude)*/;
+            locationInfoText.setText(text);
         }
     }
 }

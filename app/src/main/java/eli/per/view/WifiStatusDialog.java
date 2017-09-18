@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -14,6 +15,8 @@ import eli.per.data.Util;
 import eli.per.testlistview.R;
 
 public class WifiStatusDialog extends Dialog implements View.OnClickListener{
+
+    private static final String TAG = "WifiStatusDialog";
 
     private Context context;
 
@@ -55,8 +58,13 @@ public class WifiStatusDialog extends Dialog implements View.OnClickListener{
                 break;
 
             case R.id.dialog_wifi_connect:
-                if (context != null)
-                    context.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                if (context != null) {
+                    try {
+                        context.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
                 break;
         }
         dismiss();

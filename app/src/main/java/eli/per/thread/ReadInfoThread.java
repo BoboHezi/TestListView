@@ -5,7 +5,6 @@ import android.net.TrafficStats;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Message;
-import android.util.Log;
 
 import java.util.Random;
 
@@ -78,7 +77,7 @@ public class ReadInfoThread extends Thread {
     private void sendInfo(float rate, int rssi) {
         if (eRefreshInfoHandler != null) {
             final Message msg = eRefreshInfoHandler.obtainMessage();
-            msg.what = ControlActivity.HANDLER_INFO;
+            msg.what = ControlActivity.HANDLER_WIFI_AND_NET_INFO;
             Bundle bundle = new Bundle();
             bundle.putFloat("RATE", rate);
             bundle.putInt("RSSI", rssi);

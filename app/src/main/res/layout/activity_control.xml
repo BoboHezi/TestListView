@@ -48,5 +48,13 @@
             android:layout_gravity="center"
             app:loading_circleColor="#aa40a8cc"
             app:loading_circleRadius="20" />
+
+        <TextView
+            android:id="@+id/control_location_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#000"
+            android:textSize="20dp"/>
     </FrameLayout>
 </LinearLayout>
