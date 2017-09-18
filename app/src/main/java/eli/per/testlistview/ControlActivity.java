@@ -1,8 +1,6 @@
 package eli.per.testlistview;
 
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
-import android.icu.text.DecimalFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;

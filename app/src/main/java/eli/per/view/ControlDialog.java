@@ -79,6 +79,7 @@ public class ControlDialog extends Dialog implements OnControlStateChangeListene
 
     /**
      * 条目选中时的接口
+     *
      * @param index 选中条目的索引
      */
     @Override
@@ -88,6 +89,7 @@ public class ControlDialog extends Dialog implements OnControlStateChangeListene
 
     /**
      * 速度改变时的接口
+     *
      * @param velocity 速度
      */
     @Override
@@ -97,6 +99,7 @@ public class ControlDialog extends Dialog implements OnControlStateChangeListene
 
     /**
      * 开关状态改变的接口
+     *
      * @param isOpen 开关状态
      */
     @Override

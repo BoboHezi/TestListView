@@ -100,6 +100,7 @@ public class TernarySelectView extends View {
 
     /**
      * 获取当前指针状态
+     *
      * @return
      */
     public int getState() {

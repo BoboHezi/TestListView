@@ -14,7 +14,7 @@ import android.widget.TextView;
 import eli.per.data.Util;
 import eli.per.testlistview.R;
 
-public class WifiStatusDialog extends Dialog implements View.OnClickListener{
+public class WifiStatusDialog extends Dialog implements View.OnClickListener {
 
     private static final String TAG = "WifiStatusDialog";
 
