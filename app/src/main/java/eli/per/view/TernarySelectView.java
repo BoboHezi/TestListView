@@ -13,6 +13,7 @@ public class TernarySelectView extends View {
     private static final int LINE_COLOR = 0xFF0C719F;
     private static final int POINT_COLOR = 0xFF023546;
     private static final int CENTER_COLOR = 0xffaaaaaa;
+    private static final int TEXT_COLOR = 0xffffffff;
 
     public static final int STATE_CENTER = 0;
     public static final int STATE_UP = 1;
@@ -66,9 +67,9 @@ public class TernarySelectView extends View {
 
         //绘制竖线
         paint.setColor(LINE_COLOR);
-        canvas.drawRect(horizontalBaseLine - lineWidth / 2, pointRadius, horizontalBaseLine + lineWidth / 2, viewHeight - pointRadius, paint);
-        canvas.drawCircle(horizontalBaseLine, pointRadius, lineWidth / 2, paint);
-        canvas.drawCircle(horizontalBaseLine, viewHeight - pointRadius, lineWidth / 2, paint);
+        canvas.drawRect(horizontalBaseLine - lineWidth / 2, pointRadius * 2, horizontalBaseLine + lineWidth / 2, viewHeight - pointRadius * 2, paint);
+        canvas.drawCircle(horizontalBaseLine, pointRadius * 2, lineWidth / 2, paint);
+        canvas.drawCircle(horizontalBaseLine, viewHeight - pointRadius * 2, lineWidth / 2, paint);
 
         //绘制大圆
         paint.setColor(POINT_COLOR);
@@ -77,6 +78,13 @@ public class TernarySelectView extends View {
         //绘制小圆
         paint.setColor(CENTER_COLOR);
         canvas.drawCircle(horizontalBaseLine, pointY, lineWidth / 2, paint);
+
+        //绘制文字
+        paint.setColor(TEXT_COLOR);
+        paint.setTextSize(25);
+        float textWidth = paint.measureText("收线");
+        canvas.drawText("收线", (viewWidth - textWidth) / 2, 20, paint);
+        canvas.drawText("放线", (viewWidth - textWidth) / 2, viewHeight - 5, paint);
     }
 
     @Override
@@ -88,10 +96,10 @@ public class TernarySelectView extends View {
             //获取Y值
             pointY = event.getY();
             //当手指离开激活区域，控制其偏移位置
-            if (pointY < pointRadius) {
-                pointY = pointRadius;
-            } else if (pointY > viewHeight - pointRadius) {
-                pointY = viewHeight - pointRadius;
+            if (pointY < pointRadius * 2) {
+                pointY = pointRadius * 2;
+            } else if (pointY > viewHeight - pointRadius * 2) {
+                pointY = viewHeight - pointRadius * 2;
             }
         }
         postInvalidate();

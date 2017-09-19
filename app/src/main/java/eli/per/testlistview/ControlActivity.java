@@ -8,10 +8,13 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.text.DecimalFormat;
 
 import eli.per.server.LocateListener;
 import eli.per.thread.ReadInfoThread;
@@ -115,7 +118,7 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
                 latitude = Math.abs(latitude);
             }
 
-            text += latitude/*new DecimalFormat("0.00").format(latitude)*/;
+            text += new DecimalFormat("0.00").format(latitude);
             text += "    ";
 
             if (longitude >= 0) {
@@ -125,7 +128,7 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
                 longitude = Math.abs(longitude);
             }
 
-            text += longitude/*new DecimalFormat("0.00").format(longitude)*/;
+            text += new DecimalFormat("0.00").format(longitude);
             locationInfoText.setText(text);
         }
     }
