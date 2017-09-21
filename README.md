@@ -5,12 +5,8 @@ Test object,include listview,connect and control view.<br>
 * Corporation: UBI-TEK<br>
 * Email: eliflichang@gmail.com<br>
 
-横线
-
-***<br>
-
----<br>
-
-___<br>
+***
+---
+___
 
 ![](https://github.com/BoboHezi/TestListView/raw/master/app/src/main/res/drawable/banner.png)<br>
