@@ -5,7 +5,6 @@ Test object,include listview,connect and control view.<br>
 * Corporation: UBI-TEK<br>
 * Email: eliflichang@gmail.com<br>
 ***
-#Lines<br>
 
 ***<br>
 
