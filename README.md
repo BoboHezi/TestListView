@@ -32,5 +32,5 @@ ___
             }
         }
         
-```<br>
+```
 ![](https://github.com/BoboHezi/TestListView/raw/master/app/src/main/res/drawable/banner.png)<br>
