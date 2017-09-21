@@ -9,7 +9,7 @@ Test object,include listview,connect and control view.<br>
 ---
 ___
 
-'''java
+```java
 
         /**
          * 更新录制时间
@@ -32,5 +32,5 @@ ___
             }
         }
         
-'''<br>
+```<br>
 ![](https://github.com/BoboHezi/TestListView/raw/master/app/src/main/res/drawable/banner.png)<br>
