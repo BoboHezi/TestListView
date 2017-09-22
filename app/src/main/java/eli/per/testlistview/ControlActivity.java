@@ -1,5 +1,7 @@
 package eli.per.testlistview;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,7 +10,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 
+import eli.per.server.HelpLayer;
 import eli.per.server.LocateListener;
 import eli.per.thread.ReadInfoThread;
 import eli.per.view.ControlDialog;
@@ -23,6 +26,9 @@ import eli.per.view.VideoLoadingView;
 import eli.per.view.WifiStatusDialog;
 
 public class ControlActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private Context context;
+    private Activity activity;
 
     private static final String TAG = "ControlActivity";
     public static final int HANDLER_WIFI_AND_NET_INFO = 1;
@@ -36,6 +42,9 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
     private TextView locationInfoText;
 
     private RefreshInfoHandler refreshInfoHandler;
+
+    private boolean isFirstLauncher = true;
+    private HelpLayer helpLayer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +61,17 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
         refreshInfoHandler = new RefreshInfoHandler();
         new ReadInfoThread(this, refreshInfoHandler).start();
         new LocateListener(this, refreshInfoHandler);
+
+        context = this;
+        activity = this;
+        if (isFirstLauncher) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    helpLayer = new HelpLayer(context, activity);
+                }
+            }, 1000);
+        }
     }
 
     private void initView() {
@@ -85,6 +105,15 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
         } else if (view.getId() == R.id.control_wifi_button) {
             new WifiStatusDialog(this).show();
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && helpLayer != null && helpLayer.isAssisting()) {
+            helpLayer.stopAssist();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     /**
@@ -129,7 +158,7 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
             }
 
             text += new DecimalFormat("0.00").format(longitude);
-            locationInfoText.setText(text);
+            //locationInfoText.setText(text);
         }
     }
 }

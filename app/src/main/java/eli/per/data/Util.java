@@ -1,7 +1,9 @@
 package eli.per.data;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.util.DisplayMetrics;
 
 public class Util {
 
@@ -37,5 +39,54 @@ public class Util {
      */
     public static boolean isLandscape(Context context) {
         return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
+
+    /**
+     * 获取屏幕宽度
+     * @param context
+     * @return
+     */
+    public static float getWindowWidth(Context context) {
+        float width = 0;
+        try {
+            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+            width = displayMetrics.widthPixels;
+        } catch (Exception e) {
+        }
+
+        return width;
+    }
+
+    /**
+     * 获取屏幕高度
+     * @param context
+     * @return
+     */
+    public static float getWindowHeight(Context context) {
+        float height = 0;
+        try {
+            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+            height = displayMetrics.heightPixels;
+        } catch (Exception e) {
+        }
+
+        return height;
+    }
+
+    /**
+     * 获取状态栏高度
+     * @param context
+     * @return
+     */
+    public static float getStatusBarHeight(Context context) {
+        float statusBarHeight = 0;
+        try {
+            int resourceID = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resourceID > 0) {
+                statusBarHeight = context.getResources().getDimensionPixelSize(resourceID);
+            }
+        } catch (Exception e) {
+        }
+        return statusBarHeight;
     }
 }

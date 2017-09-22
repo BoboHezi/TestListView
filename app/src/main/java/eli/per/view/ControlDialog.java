@@ -2,11 +2,14 @@ package eli.per.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,10 @@ public class ControlDialog extends Dialog implements OnControlStateChangeListene
 
     private static final String TAG = "ControlDialog";
     private Context context;
+
+    private boolean isFirstLauncher = true;
+    private int helpLayerIndex = 1;
+    private ImageView helpImageView;
 
     //分辨率选择视图
     private ItemSelectView itemSelectView;
@@ -61,6 +68,8 @@ public class ControlDialog extends Dialog implements OnControlStateChangeListene
         lightSwitchView = findViewById(R.id.control_switch);
         lightSwitchView.setOnControlStateChangedListener(this);
         lightSwitchView.setSwitch(true);
+
+        helpImageView = findViewById(R.id.control_dialog_help_image);
     }
 
     @Override
@@ -75,6 +84,19 @@ public class ControlDialog extends Dialog implements OnControlStateChangeListene
         lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
         lp.gravity = Gravity.LEFT;
         window.setAttributes(lp);
+
+        if (isFirstLauncher) {
+            new Handler().postDelayed(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            helpImageView.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.help_layer_2));
+                            helpImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                        }
+                    },
+                    1000
+            );
+        }
     }
 
     /**

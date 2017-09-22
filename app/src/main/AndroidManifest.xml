@@ -24,15 +24,21 @@
         <activity
             android:name=".ControlActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <!--网络连接页面-->
         <activity
             android:name=".ConnectActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <!--悬浮球-->
+        <activity
+            android:name=".FloatingBallActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>
