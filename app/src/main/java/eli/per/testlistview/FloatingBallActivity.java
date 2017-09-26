@@ -1,53 +1,49 @@
 package eli.per.testlistview;
 
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.renderscript.Allocation;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import eli.per.view.FloatingControlBall;
+import eli.per.server.FloatBallService;
 
 public class FloatingBallActivity extends AppCompatActivity {
     private static final String TAG = "FloatingBallActivity";
 
     private ImageView backgroundImage;
-    private FloatingControlBall floatBall;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_float_ball);
 
+        //设置全屏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //设置横屏
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+
         initView();
     }
 
     private void initView() {
         backgroundImage = (ImageView) findViewById(R.id.float_back);
-        floatBall = (FloatingControlBall) findViewById(R.id.float_ball);
-
-        rotateBack();
     }
 
-    private void rotateBack() {
-        if (backgroundImage != null) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.banner);
-            Matrix matrix = new Matrix();
-            matrix.setRotate(90);
+    @Override
+    protected void onResume() {
+        FloatingBallActivity.this.startService(new Intent(FloatingBallActivity.this, FloatBallService.class));
+        super.onResume();
+    }
 
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-            backgroundImage.setImageBitmap(bitmap);
-        }
+    @Override
+    protected void onStop() {
+        FloatingBallActivity.this.stopService(new Intent(FloatingBallActivity.this, FloatBallService.class));
+        super.onStop();
     }
 }

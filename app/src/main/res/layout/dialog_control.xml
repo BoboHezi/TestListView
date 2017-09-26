@@ -17,23 +17,23 @@
             android:layout_weight="1">
 
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_weight="1">
-
-            <eli.per.view.ItemSelectView
-                android:id="@+id/control_resolution"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="20dp"
-                android:background="#00000000"
-                app:select_circleColor="#095954"
-                app:select_lineColor="#09938c"
-                app:select_textColor="#767676"
-                app:select_circleRadius="15"
-                app:select_lineHeight="4" />
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <eli.per.view.ItemSelectView
+                    android:id="@+id/control_resolution"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:background="#00000000"
+                    app:select_circleColor="#095954"
+                    app:select_lineColor="#09938c"
+                    app:select_textColor="#767676"
+                    app:select_circleRadius="15"
+                    app:select_lineHeight="4" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

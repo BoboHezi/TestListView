@@ -36,7 +36,7 @@ public class HelpLayer implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        helpLayerIndex ++;
+        helpLayerIndex++;
         switch (helpLayerIndex) {
             case 1:
                 helpImageView.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.help_layer_5));

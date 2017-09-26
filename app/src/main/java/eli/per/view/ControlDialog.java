@@ -84,19 +84,6 @@ public class ControlDialog extends Dialog implements OnControlStateChangeListene
         lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
         lp.gravity = Gravity.LEFT;
         window.setAttributes(lp);
-
-        if (isFirstLauncher) {
-            new Handler().postDelayed(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            helpImageView.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.help_layer_2));
-                            helpImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                        }
-                    },
-                    1000
-            );
-        }
     }
 
     /**

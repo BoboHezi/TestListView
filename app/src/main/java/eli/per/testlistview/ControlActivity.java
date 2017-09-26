@@ -2,6 +2,7 @@ package eli.per.testlistview;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 
+import eli.per.server.FloatBallService;
 import eli.per.server.HelpLayer;
 import eli.per.server.LocateListener;
 import eli.per.thread.ReadInfoThread;
@@ -43,9 +45,6 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
 
     private RefreshInfoHandler refreshInfoHandler;
 
-    private boolean isFirstLauncher = true;
-    private HelpLayer helpLayer;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,17 +60,18 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
         refreshInfoHandler = new RefreshInfoHandler();
         new ReadInfoThread(this, refreshInfoHandler).start();
         new LocateListener(this, refreshInfoHandler);
+    }
 
-        context = this;
-        activity = this;
-        if (isFirstLauncher) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    helpLayer = new HelpLayer(context, activity);
-                }
-            }, 1000);
-        }
+    @Override
+    protected void onResume() {
+        ControlActivity.this.startService(new Intent(ControlActivity.this, FloatBallService.class));
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        ControlActivity.this.stopService(new Intent(ControlActivity.this, FloatBallService.class));
+        super.onStop();
     }
 
     private void initView() {
@@ -105,15 +105,6 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
         } else if (view.getId() == R.id.control_wifi_button) {
             new WifiStatusDialog(this).show();
         }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && helpLayer != null && helpLayer.isAssisting()) {
-            helpLayer.stopAssist();
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     /**

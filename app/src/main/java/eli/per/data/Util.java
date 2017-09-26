@@ -43,6 +43,7 @@ public class Util {
 
     /**
      * 获取屏幕宽度
+     *
      * @param context
      * @return
      */
@@ -59,6 +60,7 @@ public class Util {
 
     /**
      * 获取屏幕高度
+     *
      * @param context
      * @return
      */
@@ -75,6 +77,7 @@ public class Util {
 
     /**
      * 获取状态栏高度
+     *
      * @param context
      * @return
      */

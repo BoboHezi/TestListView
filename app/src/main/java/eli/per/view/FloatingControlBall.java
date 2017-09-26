@@ -5,185 +5,273 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.RectF;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
-import eli.per.data.Util;
+import eli.per.data.Velocity;
 import eli.per.testlistview.R;
 
 public class FloatingControlBall extends View {
 
     private static final String TAG = "FloatingControlBall";
     private Context context;
+    //圆点颜色
+    private static final int pointColor = 0xff40a8cc;
+    //字体颜色
+    private int textColor;
+    //圆点半径
+    private float pointRadius;
+    //偏移距离
+    private static final float OFFSET_PIX = 5;
     //画笔
     private Paint paint;
-    //画笔透明度
-    private int alpha = 200;
-    //该组件的布局参数
-    private FrameLayout.LayoutParams layoutParams;
-    //手机屏幕宽高
-    private float windowWidth;
-    private float windowHeight;
-    //手机状态栏高度
-    private float statusBarHeight;
+    //默认圆心坐标X值
+    private float defaultRadiusX;
+    //默认圆心坐标Y值
+    private float defaultRadiusY;
+    //圆心坐标X值
+    private float radiusX;
+    //圆心坐标Y值
+    private float radiusY;
+    //圆点和中心点的距离
+    private float offset;
+    //圆点角度
+    private float angle;
     //组件宽高
     private float viewWidth;
-    //组件相对于手机的边距
-    private static final float BORDER = 30;
-    //触摸组件按下的时间
-    private long touchDownTime;
-    //触摸组件按下的位置
-    private float touchDownX;
-    private float touchDownY;
-    //拖拽状态标记
-    private boolean isDragging = false;
-    //船舵位图
-    private Bitmap helmBitmap;
-    //船舵位图位置
-    private RectF helmRect;
+    //状态标记
+    private boolean isControlMode = false;
+    //退回中心点的线程
+    private BackToPointThread backThread;
+    //箭头位图
+    private Bitmap arrowHead;
+    //位图显示区域
+    private Rect rectF;
 
-    public FloatingControlBall(Context context) {
-        this(context, null);
-    }
-
-    public FloatingControlBall(Context context, AttributeSet attributeSet) {
-        this(context, attributeSet, 0);
-    }
-
-    public FloatingControlBall(Context context, AttributeSet attributeSet, int defStyle) {
-        super(context, attributeSet, defStyle);
+    public FloatingControlBall(Context context, float viewWidth) {
+        super(context);
         this.context = context;
+        this.viewWidth = viewWidth;
+        this.pointRadius = viewWidth / 2;
         //设置组件的点击事件
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
             }
         });
-        //初始化组件的位置参数
-        layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        //获取手机的尺寸参数
-        windowWidth = Util.getWindowWidth(context);
-        windowHeight = Util.getWindowHeight(context);
-        statusBarHeight = Util.getStatusBarHeight(context);
         //初始化画笔
         paint = new Paint();
         paint.setAntiAlias(true);
 
-        helmBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.helm);
+        arrowHead = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowhead);
+        rectF = new Rect(0, 0, 80, 40);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        //获取组件窗口模式和大小
-        int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
-        //当含有自适应的尺寸时，将宽高都设置为130像素
-        if (widthSpecMode == MeasureSpec.AT_MOST && heightSpecMode == MeasureSpec.AT_MOST) {
-            widthSpecSize = 140;
-            heightSpecSize = 140;
-        } else if (widthSpecMode != MeasureSpec.AT_MOST && heightSpecMode == MeasureSpec.AT_MOST) {
-            heightSpecSize = widthSpecSize;
-        } else if (widthSpecMode == MeasureSpec.AT_MOST && heightSpecMode != MeasureSpec.AT_MOST) {
-            widthSpecSize = heightSpecSize;
-        }
-        //当宽高不相等时，将宽高设置为最小的一条边
-        if (widthSpecSize != heightSpecSize) {
-            widthSpecSize = Math.min(widthSpecSize, heightSpecSize);
-            heightSpecSize = widthSpecSize;
-        }
-        setMeasuredDimension(widthSpecSize, heightSpecSize);
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         //获取组件宽高
-        viewWidth = widthSpecSize;
+        viewWidth = getMeasuredWidth();
+
+        defaultRadiusX = viewWidth / 2;
+        defaultRadiusY = viewWidth / 2;
+
+        radiusX = defaultRadiusX;
+        radiusY = defaultRadiusY;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        paint.setColor(0xff000000);
-        paint.setAlpha(alpha);
-        canvas.drawCircle(viewWidth / 2, viewWidth / 2, viewWidth / 2, paint);
+        if (isControlMode) {
 
-        float helmSize = viewWidth * 3 / 4;
-        helmRect = new RectF((viewWidth - helmSize) / 2, (viewWidth - helmSize) / 2, (viewWidth + helmSize) / 2, (viewWidth + helmSize) / 2);
-        canvas.drawBitmap(helmBitmap, null, helmRect, paint);
+            //绘制边线
+            paint.setColor(0x5553AEBA);
+            canvas.drawCircle(viewWidth / 2, viewWidth / 2, viewWidth / 2, paint);
+            paint.setColor(0x77085660);
+            canvas.drawCircle(viewWidth / 2, viewWidth / 2, viewWidth / 2 - pointRadius, paint);
+
+            //绘制圆点
+            paint.setColor(pointColor);
+            canvas.drawCircle(radiusX, radiusY, pointRadius, paint);
+
+            //绘制箭头
+            canvas.translate(viewWidth / 2 - 40, 5);
+            canvas.drawBitmap(arrowHead, null, rectF, paint);
+            //复位
+            canvas.translate(40 - viewWidth / 2, -5);
+            //绘制箭头
+            canvas.translate(5, viewWidth / 2 + 40);
+            canvas.rotate(-90);
+            canvas.drawBitmap(arrowHead, null, rectF, paint);
+            //复位
+            canvas.rotate(90);
+            canvas.translate(-5, -(40 + viewWidth / 2));
+            //绘制箭头
+            canvas.translate(viewWidth - 5, viewWidth / 2 - 40);
+            canvas.rotate(90);
+            canvas.drawBitmap(arrowHead, null, rectF, paint);
+            //复位
+            canvas.rotate(-90);
+            canvas.translate(5 - viewWidth, 40 - viewWidth / 2);
+            //绘制箭头
+            canvas.translate(viewWidth / 2 + 40, viewWidth - 5);
+            canvas.rotate(180);
+            canvas.drawBitmap(arrowHead, null, rectF, paint);
+        } else {
+            int unfocusedColor = pointColor & 0xafffffff;
+            paint.setColor(unfocusedColor);
+            canvas.drawCircle(viewWidth / 2, viewWidth / 2, viewWidth / 2, paint);
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        //获取触摸的位置
-        float x = event.getRawX();
-        float y = event.getRawY();
+        if (!isControlMode) {
+            return false;
+        }
+        //获得触点的坐标
+        float touchX = event.getX();
+        float touchY = event.getY();
 
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            //当手指按下时，记录当前时间和位置
-            touchDownTime = System.currentTimeMillis();
-            touchDownX = x;
-            touchDownY = y;
-        } else if (event.getAction() == MotionEvent.ACTION_UP) {
-            /**
-             * 手指离开时，同时满足以下两个条件：
-             *
-             * 1.距离手指按下的时间小于500毫秒
-             *
-             * 2.相对于手指按下的位置没有变化
-             *
-             * 触发点击事件
-             */
-            if ((System.currentTimeMillis() - touchDownTime) < 500 && (x == touchDownX) && (y == touchDownY)) {
-                Log.i(TAG, "Click...");
-            }
-            //设置状态为停止拖拽
-            if (isDragging) {
-                isDragging = false;
-            }
-        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            //当手指移动距离相对于按下的位置偏移10个像素以上时，进一步判断
-            if ((Math.sqrt(((x - touchDownX) * (x - touchDownX) + (y - touchDownY) * (y - touchDownY)))) > 10) {
-                //当按下并且静止的时间大于500毫秒时，移动组件的位置。否则，将手指按下的时间更新，以取消点击和移动事件
-                if ((System.currentTimeMillis() - touchDownTime) > 500) {
-                    setPosition((int) x, (int) y);
-                    //设置状态为拖拽中
-                    if (!isDragging) {
-                        isDragging = true;
-                    }
-                } else {
-                    touchDownTime = System.currentTimeMillis();
-                }
-            }
+        //计算触点和中心点的距离
+        float distance = (float) Math.sqrt((touchX - defaultRadiusX) * (touchX - defaultRadiusX) + (touchY - defaultRadiusY) * (touchY - defaultRadiusY));
+
+        //当距离大于大圆的半径时，重新计算坐标
+        if ((distance + pointRadius * 2) > viewWidth / 2) {
+
+            //X，Y偏移
+            float offsetX = viewWidth / 2 - touchX;
+            float offsetY = viewWidth / 2 - touchY;
+
+            //角度的正余弦
+            float cos = offsetX / distance;
+            float sin = offsetY / distance;
+
+            //触点与圆心的连线，和圆弧的交点的位置
+            float pointX = viewWidth / 2 - (viewWidth / 2 - (pointRadius * 2)) * cos;
+            float pointY = viewWidth / 2 - (viewWidth / 2 - (pointRadius * 2)) * sin;
+
+            //定义圆点的位置
+            radiusX = pointX;
+            radiusY = pointY;
+        } else {
+            //定义圆点的位置
+            radiusX = touchX;
+            radiusY = touchY;
         }
 
+        //当垂直方向的距离过大时，将Y轴设为高度，防止溢出
+        if (radiusY > viewWidth) {
+            radiusY = viewWidth;
+        }
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                //当手指点击时
+                if (backThread != null) {
+                    //取消正在运行的返回中心点的任务
+                    backThread.interrupt();
+                    backThread = null;
+                }
+                postInvalidate();
+                break;
+
+            case MotionEvent.ACTION_UP:
+                //当手指抬起后，让小球回到中心点
+                backThread = new BackToPointThread();
+                backThread.start();
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                //更新视图
+                postInvalidate();
+                break;
+        }
         return super.onTouchEvent(event);
     }
 
     /**
-     * 设置空间的位置
-     * @param x
-     * @param y
+     * 获取组件尺寸
+     *
+     * @return
      */
-    public void setPosition(int x, int y) {
-        //判断是否成功获取到手机屏幕的宽高
-        if (windowWidth * windowHeight > 100) {
-            //限定组件的X轴坐标
-            if ((x - viewWidth / 2) < BORDER) {
-                x = (int) (viewWidth / 2 + BORDER);
-            } else if ((x + viewWidth / 2) > windowWidth - BORDER) {
-                x = (int) (windowWidth - viewWidth / 2 - BORDER);
+    public float getViewWidth() {
+        return viewWidth;
+    }
+
+    /**
+     * 设置当前是否处于控制模式
+     *
+     * @param isControlMode
+     */
+    public void setControlMode(boolean isControlMode) {
+        this.isControlMode = isControlMode;
+        if (isControlMode) {
+            pointRadius = 40;
+        }
+        postInvalidate();
+    }
+
+    /**
+     * 计算位移和角度
+     */
+    private void calculate() {
+        //及计算触点和中心点的距离
+        offset = (float) Math.sqrt((radiusX - defaultRadiusX) * (radiusX - defaultRadiusX) + (radiusY - defaultRadiusY) * (radiusY - defaultRadiusY));
+        //计算正弦值
+        float cos = (viewWidth / 2 - radiusX) / offset;
+        //计算角度
+        if (offset == 0) {
+            angle = 0;
+        } else {
+            angle = (float) ((Math.PI / 2 - Math.asin(cos)) / Math.PI * 180);
+            if (radiusY > viewWidth / 2) {
+                angle = -angle;
             }
-            //限定组件的Y轴坐标
-            if ((y - viewWidth / 2) < statusBarHeight + BORDER + 10) {
-                y = (int) (viewWidth / 2 + statusBarHeight + BORDER + 10);
-            } else if ((y + viewWidth / 2) > windowHeight - BORDER + 10) {
-                y = (int) (windowHeight - viewWidth / 2 - BORDER + 10);
+        }
+    }
+
+    /**
+     * 返回中心点的线程
+     */
+    private class BackToPointThread extends Thread {
+        @Override
+        public void run() {
+            while (true) {
+                //计算方向和速度
+                calculate();
+                //当圆点和中心点距离小于10.或者线程被中断时，退出循环
+                if (offset <= OFFSET_PIX * 2 || this.isInterrupted()) {
+                    break;
+                }
+                //计算角度对应的弧度
+                float radius = (float) Math.toRadians(angle);
+                //计算正余弦值
+                float cos = (float) Math.cos(radius);
+                float sin = (float) Math.sin(radius);
+                //计算对应角度下的X，Y轴偏移
+                float offsetX = OFFSET_PIX * cos;
+                float offsetY = OFFSET_PIX * sin;
+                //设置对应的偏移
+                radiusX += offsetX;
+                radiusY += offsetY;
+
+                //当偏移的X轴或者Y轴接近中心点时，将位置设置到中心点
+                if (Math.abs(radiusX - defaultRadiusX) < OFFSET_PIX * 2)
+                    radiusX = defaultRadiusX;
+                if (Math.abs(radiusY - defaultRadiusY) < OFFSET_PIX * 2)
+                    radiusY = defaultRadiusY;
+
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    break;
+                }
+                postInvalidate();
             }
-            //设置组件坐标
-            layoutParams.setMargins((int) (x - viewWidth / 2), (int) (y - viewWidth), 0, 0);
-            this.setLayoutParams(layoutParams);
         }
     }
 }
