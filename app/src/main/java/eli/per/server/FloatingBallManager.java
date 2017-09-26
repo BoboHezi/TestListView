@@ -12,6 +12,11 @@ import android.view.WindowManager.LayoutParams;
 import eli.per.data.Util;
 import eli.per.view.FloatingControlBall;
 
+/**
+ * 悬浮球控制类
+ *
+ * @author eli chang
+ */
 public class FloatingBallManager implements View.OnTouchListener {
     private static final String TAG = "FloatingBallManager";
     private static FloatingBallManager floatBallManager;
@@ -19,6 +24,7 @@ public class FloatingBallManager implements View.OnTouchListener {
     private Context context;
     private WindowManager windowManager;
     private LayoutParams layoutParams;
+    //悬浮球
     private FloatingControlBall floatBall;
 
     private static final int minWidth = 120;
