@@ -5,7 +5,8 @@ public class Velocity {
     public enum Direction {
         front,
         left,
-        right
+        right,
+        back
     }
 
     private int speed;

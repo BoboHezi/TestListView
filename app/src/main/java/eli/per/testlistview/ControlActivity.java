@@ -11,7 +11,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -19,8 +18,7 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 
-import eli.per.server.FloatBallService;
-import eli.per.server.HelpLayer;
+import eli.per.server.ControlService;
 import eli.per.server.LocateListener;
 import eli.per.thread.ReadInfoThread;
 import eli.per.view.ControlDialog;
@@ -64,13 +62,13 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     protected void onResume() {
-        ControlActivity.this.startService(new Intent(ControlActivity.this, FloatBallService.class));
+        ControlActivity.this.startService(new Intent(ControlActivity.this, ControlService.class));
         super.onResume();
     }
 
     @Override
     protected void onStop() {
-        ControlActivity.this.stopService(new Intent(ControlActivity.this, FloatBallService.class));
+        ControlActivity.this.stopService(new Intent(ControlActivity.this, ControlService.class));
         super.onStop();
     }
 

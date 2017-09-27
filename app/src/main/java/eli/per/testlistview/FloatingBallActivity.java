@@ -2,16 +2,13 @@ package eli.per.testlistview;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import eli.per.server.FloatBallService;
+import eli.per.server.ControlService;
 
 public class FloatingBallActivity extends AppCompatActivity {
     private static final String TAG = "FloatingBallActivity";
@@ -37,13 +34,13 @@ public class FloatingBallActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        FloatingBallActivity.this.startService(new Intent(FloatingBallActivity.this, FloatBallService.class));
+        FloatingBallActivity.this.startService(new Intent(FloatingBallActivity.this, ControlService.class));
         super.onResume();
     }
 
     @Override
     protected void onStop() {
-        FloatingBallActivity.this.stopService(new Intent(FloatingBallActivity.this, FloatBallService.class));
+        FloatingBallActivity.this.stopService(new Intent(FloatingBallActivity.this, ControlService.class));
         super.onStop();
     }
 }

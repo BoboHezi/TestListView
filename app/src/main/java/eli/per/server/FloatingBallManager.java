@@ -19,13 +19,13 @@ import eli.per.view.FloatingControlBall;
  */
 public class FloatingBallManager implements View.OnTouchListener {
     private static final String TAG = "FloatingBallManager";
-    private static FloatingBallManager floatBallManager;
 
     private Context context;
     private WindowManager windowManager;
     private LayoutParams layoutParams;
+    private static FloatingBallManager floatBallManager;
     //悬浮球
-    private FloatingControlBall floatBall;
+    private static FloatingControlBall floatBall;
     //悬浮球最小化的尺寸
     private static final int minWidth = 120;
     //悬浮球最大化的尺寸
@@ -110,6 +110,10 @@ public class FloatingBallManager implements View.OnTouchListener {
         }
     }
 
+    public FloatingControlBall getFloatBall() {
+        return this.floatBall;
+    }
+
     @Override
     public boolean onTouch(View view, MotionEvent event) {
 
@@ -159,8 +163,11 @@ public class FloatingBallManager implements View.OnTouchListener {
                 }
                 setControlMode(isControlMode);
             }
-            //存储当前悬浮球的位置
-            writePosition((int) x, (int) y);
+
+            if (!isControlMode) {
+                //存储当前悬浮球的位置
+                writePosition((int) x, (int) y);
+            }
         }
         return false;
     }

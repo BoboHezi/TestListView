@@ -6,9 +6,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import eli.per.data.OnControlStateChangeListener;
+import eli.per.data.Velocity;
 import eli.per.testlistview.R;
 
 public class FloatingControlBall extends View {
@@ -18,7 +21,7 @@ public class FloatingControlBall extends View {
     //圆点颜色
     private static final int pointColor = 0xff40a8cc;
     //字体颜色
-    private int textColor;
+    private int textColor = 0xff000000;
     //圆点半径
     private float pointRadius;
     //偏移距离
@@ -36,7 +39,7 @@ public class FloatingControlBall extends View {
     //圆点和中心点的距离
     private float offset;
     //圆点角度
-    private float angle;
+    private int angle;
     //组件宽高
     private float viewWidth;
     //状态标记
@@ -47,6 +50,10 @@ public class FloatingControlBall extends View {
     private Bitmap arrowHead;
     //位图显示区域
     private Rect rectF;
+    //速度值改变的接口
+    private OnControlStateChangeListener changeListener;
+    //方向
+    private Velocity velocity;
 
     public FloatingControlBall(Context context, float viewWidth) {
         super(context);
@@ -65,6 +72,8 @@ public class FloatingControlBall extends View {
 
         arrowHead = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowhead);
         rectF = new Rect(0, 0, 80, 40);
+
+        velocity = new Velocity(0, Velocity.Direction.front);
     }
 
     @Override
@@ -83,6 +92,21 @@ public class FloatingControlBall extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         if (isControlMode) {
+            //计算方向和速度
+            calculate();
+
+            //绘制文字
+            String speedText = velocity.getSpeed() + ":速度";
+            String directionText = "方向:" + velocity.getDirection();
+            paint.setColor(textColor);
+            paint.setStyle(Paint.Style.FILL);
+            paint.setTextSize(30);
+            //书写速度
+            paint.setTextAlign(Paint.Align.LEFT);
+            canvas.drawText(directionText, 0, 30, paint);
+            //书写方向
+            paint.setTextAlign(Paint.Align.RIGHT);
+            canvas.drawText(speedText, viewWidth, 30, paint);
 
             //绘制边线
             paint.setColor(0x5553AEBA);
@@ -213,6 +237,15 @@ public class FloatingControlBall extends View {
     }
 
     /**
+     * 设置速度变化监听
+     *
+     * @param changedListener
+     */
+    public void setOnControlStateChangedListener(OnControlStateChangeListener changedListener) {
+        this.changeListener = changedListener;
+    }
+
+    /**
      * 计算位移和角度
      */
     private void calculate() {
@@ -224,10 +257,35 @@ public class FloatingControlBall extends View {
         if (offset == 0) {
             angle = 0;
         } else {
-            angle = (float) ((Math.PI / 2 - Math.asin(cos)) / Math.PI * 180);
+            angle = (int) ((Math.PI / 2 - Math.asin(cos)) / Math.PI * 180);
             if (radiusY > viewWidth / 2) {
                 angle = -angle;
             }
+        }
+
+        //计算对应的速度
+        int speed = (int) ((offset - 1) / (viewWidth / 2 - pointRadius * 2) * 4);
+        Velocity.Direction direction = Velocity.Direction.front;
+        //计算方向
+        if (speed == 0) {
+            direction = Velocity.Direction.front;
+        } else if (angle >= -45 && angle < 45) {
+            direction = Velocity.Direction.left;
+        } else if (angle >= 45 && angle < 135) {
+            direction = Velocity.Direction.front;
+        } else if (angle >= -135 && angle < -45) {
+            direction = Velocity.Direction.back;
+        } else if (Math.abs(angle) >= 135) {
+            direction = Velocity.Direction.right;
+        }
+
+        //当速度或者方向发生变化时，调用接口
+        if ((Math.abs(velocity.getSpeed() - speed)) >= 1 || velocity.getDirection() != direction) {
+            velocity.setDirection(direction);
+            velocity.setSpeed(speed);
+
+            if (backThread == null && changeListener != null)
+                changeListener.onVelocityStateChanged(velocity);
         }
     }
 
@@ -238,10 +296,14 @@ public class FloatingControlBall extends View {
         @Override
         public void run() {
             while (true) {
-                //计算方向和速度
-                calculate();
                 //当圆点和中心点距离小于10.或者线程被中断时，退出循环
                 if (offset <= OFFSET_PIX * 2 || this.isInterrupted()) {
+                    if (changeListener != null) {
+                        //退出循环之前调用状态改变的接口
+                        if (changeListener != null) {
+                            changeListener.onVelocityStateChanged(new Velocity(0, Velocity.Direction.front));
+                        }
+                    }
                     break;
                 }
                 //计算角度对应的弧度

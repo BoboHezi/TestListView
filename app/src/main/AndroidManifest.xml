@@ -41,7 +41,7 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <service
-            android:name="eli.per.server.FloatBallService"
+            android:name="eli.per.server.ControlService"
             android:enabled="true"
             android:exported="true" />
     </application>
