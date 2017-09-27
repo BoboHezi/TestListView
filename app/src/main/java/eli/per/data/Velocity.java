@@ -3,10 +3,10 @@ package eli.per.data;
 public class Velocity {
 
     public enum Direction {
-        front,
-        left,
-        right,
-        back
+        FRONT,
+        LEFT,
+        RIGHT,
+        BACK
     }
 
     private int speed;

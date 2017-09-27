@@ -68,7 +68,7 @@ public class MoveControlView extends View {
         this.context = context;
         paint = new Paint();
         paint.setAntiAlias(true);
-        velocity = new Velocity(0, Velocity.Direction.front);
+        velocity = new Velocity(0, Velocity.Direction.FRONT);
 
         TypedArray ta = context.obtainStyledAttributes(attributeSet, R.styleable.styleable_move_control);
         pointColor = ta.getColor(R.styleable.styleable_move_control_control_pointColor, 0xff000000);
@@ -256,14 +256,14 @@ public class MoveControlView extends View {
         }
         //计算对应的速度
         int speed = (int) (offset / (height - pointRadius * 3) * 4);
-        Velocity.Direction direction = Velocity.Direction.front;
+        Velocity.Direction direction = Velocity.Direction.FRONT;
         //计算方向
         if (angle > 0 && angle < 60) {
-            direction = Velocity.Direction.left;
+            direction = Velocity.Direction.LEFT;
         } else if (angle >= 60 && angle < 120) {
-            direction = Velocity.Direction.front;
+            direction = Velocity.Direction.FRONT;
         } else if (angle >= 120 && angle <= 180) {
-            direction = Velocity.Direction.right;
+            direction = Velocity.Direction.RIGHT;
         }
 
         //当速度或者方向发生变化时，调用接口
@@ -287,7 +287,7 @@ public class MoveControlView extends View {
                 if (offset <= OFFSET_PIX * 2 || this.isInterrupted()) {
                     //退出循环之前调用状态改变的接口
                     if (changeListener != null) {
-                        changeListener.onVelocityStateChanged(new Velocity(0, Velocity.Direction.front));
+                        changeListener.onVelocityStateChanged(new Velocity(0, Velocity.Direction.FRONT));
                     }
                     break;
                 }

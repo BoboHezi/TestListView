@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -73,7 +72,7 @@ public class FloatingControlBall extends View {
         arrowHead = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowhead);
         rectF = new Rect(0, 0, 80, 40);
 
-        velocity = new Velocity(0, Velocity.Direction.front);
+        velocity = new Velocity(0, Velocity.Direction.FRONT);
     }
 
     @Override
@@ -265,18 +264,18 @@ public class FloatingControlBall extends View {
 
         //计算对应的速度
         int speed = (int) ((offset - 1) / (viewWidth / 2 - pointRadius * 2) * 4);
-        Velocity.Direction direction = Velocity.Direction.front;
+        Velocity.Direction direction = Velocity.Direction.FRONT;
         //计算方向
         if (speed == 0) {
-            direction = Velocity.Direction.front;
+            direction = Velocity.Direction.FRONT;
         } else if (angle >= -45 && angle < 45) {
-            direction = Velocity.Direction.left;
+            direction = Velocity.Direction.LEFT;
         } else if (angle >= 45 && angle < 135) {
-            direction = Velocity.Direction.front;
+            direction = Velocity.Direction.FRONT;
         } else if (angle >= -135 && angle < -45) {
-            direction = Velocity.Direction.back;
+            direction = Velocity.Direction.BACK;
         } else if (Math.abs(angle) >= 135) {
-            direction = Velocity.Direction.right;
+            direction = Velocity.Direction.RIGHT;
         }
 
         //当速度或者方向发生变化时，调用接口
@@ -301,7 +300,7 @@ public class FloatingControlBall extends View {
                     if (changeListener != null) {
                         //退出循环之前调用状态改变的接口
                         if (changeListener != null) {
-                            changeListener.onVelocityStateChanged(new Velocity(0, Velocity.Direction.front));
+                            changeListener.onVelocityStateChanged(new Velocity(0, Velocity.Direction.FRONT));
                         }
                     }
                     break;

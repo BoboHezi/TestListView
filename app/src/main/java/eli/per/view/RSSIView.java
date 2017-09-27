@@ -92,7 +92,7 @@ public class RSSIView extends View {
         }
         //radian out left
         canvas.drawArc(lineWidth / 2, -viewHeight * 3 / 20, viewHeight * 59 / 60, viewHeight * 49 / 60, 137, 86, false, paint);
-        //radian out right
+        //radian out RIGHT
         canvas.drawArc(lineWidth / 2, -viewHeight * 3 / 20, viewHeight * 59 / 60, viewHeight * 49 / 60, 317, 90, false, paint);
 
         if (count >= 3) {
@@ -102,7 +102,7 @@ public class RSSIView extends View {
         }
         //radian center left
         canvas.drawArc(viewHeight * 7 / 60, -viewHeight / 60, viewHeight * 17 / 20, viewHeight * 41 / 60, 135, 90, false, paint);
-        //radian center right
+        //radian center RIGHT
         canvas.drawArc(viewHeight * 7 / 60, -viewHeight / 60, viewHeight * 17 / 20, viewHeight * 41 / 60, 315, 90, false, paint);
 
         if (count >= 2) {
@@ -112,7 +112,7 @@ public class RSSIView extends View {
         }
         //radian inner left
         canvas.drawArc(viewHeight / 4, viewHeight / 10, viewHeight * 11 / 15, viewHeight * 17 / 30, 135, 90, false, paint);
-        //radian inner right
+        //radian inner RIGHT
         canvas.drawArc(viewHeight / 4, viewHeight / 10, viewHeight * 11 / 15, viewHeight * 17 / 30, 315, 90, false, paint);
 
         //绘制中心点
