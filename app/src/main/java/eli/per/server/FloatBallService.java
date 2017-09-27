@@ -4,17 +4,24 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+/**
+ * 悬浮球的构造服务
+ *
+ * @author eli chang
+ */
 public class FloatBallService extends Service {
 
     @Override
     public void onCreate() {
         super.onCreate();
-        FloatingBallManager.getFloatBallManagerInstance(this).show();
+        //显示悬浮球
+        FloatingBallManager.getInstance(this).show();
     }
 
     @Override
     public void onDestroy() {
-        FloatingBallManager.getFloatBallManagerInstance(this).close();
+        //隐藏悬浮球
+        FloatingBallManager.getInstance(this).close();
         super.onDestroy();
     }
 

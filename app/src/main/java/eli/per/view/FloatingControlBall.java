@@ -6,12 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import eli.per.data.Velocity;
 import eli.per.testlistview.R;
 
 public class FloatingControlBall extends View {
@@ -121,7 +118,7 @@ public class FloatingControlBall extends View {
             canvas.rotate(180);
             canvas.drawBitmap(arrowHead, null, rectF, paint);
         } else {
-            int unfocusedColor = pointColor & 0xafffffff;
+            int unfocusedColor = pointColor & 0xccffffff;
             paint.setColor(unfocusedColor);
             canvas.drawCircle(viewWidth / 2, viewWidth / 2, viewWidth / 2, paint);
         }

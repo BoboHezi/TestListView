@@ -2,13 +2,13 @@ package eli.per.server;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
+import eli.per.data.Coordinate;
 import eli.per.data.Util;
 import eli.per.view.FloatingControlBall;
 
@@ -26,35 +26,59 @@ public class FloatingBallManager implements View.OnTouchListener {
     private LayoutParams layoutParams;
     //悬浮球
     private FloatingControlBall floatBall;
-
+    //悬浮球最小化的尺寸
     private static final int minWidth = 120;
+    //悬浮球最大化的尺寸
     private static final int maxWidth = 500;
-
+    //手机状态栏高度
     private float statusBarHeight;
+    private float windowWidth;
+    private float windowHeight;
     //触摸组件按下的位置
     private float touchDownX;
     private float touchDownY;
+    //触摸组件按下的时间
     private long touchDownTime;
     //控制状态标记
     private boolean isControlMode = false;
 
+    /**
+     * 私有化构造方法
+     *
+     * @param context
+     */
     private FloatingBallManager(Context context) {
         this.context = context;
+        //获取系统窗体服务
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        //初始化悬浮球
         floatBall = new FloatingControlBall(context, minWidth);
+        //设置悬浮球的触摸事件
         floatBall.setOnTouchListener(this);
-
+        //获取手机窗体像素值
+        windowWidth = Util.getWindowWidth(context);
+        windowHeight = Util.getWindowHeight(context);
         statusBarHeight = Util.getStatusBarHeight(context);
     }
 
-    public static FloatingBallManager getFloatBallManagerInstance(Context context) {
+    /**
+     * 获取本类的实例化对象
+     *
+     * @param context
+     * @return
+     */
+    public static FloatingBallManager getInstance(Context context) {
         if (floatBallManager == null)
             floatBallManager = new FloatingBallManager(context);
         return floatBallManager;
     }
 
+    /**
+     * 初始化并显示悬浮球
+     */
     public void show() {
         if (layoutParams == null) {
+            //设置悬浮球布局信息
             layoutParams = new WindowManager.LayoutParams();
             layoutParams.width = (int) floatBall.getViewWidth();
             layoutParams.height = (int) floatBall.getViewWidth();
@@ -62,13 +86,27 @@ public class FloatingBallManager implements View.OnTouchListener {
             layoutParams.type = LayoutParams.TYPE_TOAST;
             layoutParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_NOT_TOUCH_MODAL;
             layoutParams.format = PixelFormat.TRANSPARENT;
+            //读取并设置存储的位置信息
+            Coordinate position = Util.readPosition(context);
+            layoutParams.x = (int) (position.getRawX() - 60);
+            layoutParams.y = (int) (position.getRawY() - 60);
         }
-        windowManager.addView(floatBall, layoutParams);
+        try {
+            //将悬浮球添加到窗口
+            windowManager.addView(floatBall, layoutParams);
+        } catch (Exception e) {
+        }
     }
 
+    /**
+     * 隐藏悬浮球
+     */
     public void close() {
         if (windowManager != null && floatBall != null) {
-            windowManager.removeView(floatBall);
+            try {
+                windowManager.removeView(floatBall);
+            } catch (Exception e) {
+            }
         }
     }
 
@@ -96,7 +134,8 @@ public class FloatingBallManager implements View.OnTouchListener {
             float offset = (float) Math.sqrt(((x - touchDownX) * (x - touchDownX) + (y - touchDownY) * (y - touchDownY)));
             if (offset > 10 && (System.currentTimeMillis() - touchDownTime) > 200) {
                 if (!isControlMode) {
-                    setPosition((int) x - 50, (int) y - 50);
+                    //重新更新悬浮球的位置
+                    setPosition((int) x - 60, (int) y - 60);
                 }
             } else if ((System.currentTimeMillis() - touchDownTime) <= 200) {
                 touchDownTime = System.currentTimeMillis();
@@ -120,6 +159,8 @@ public class FloatingBallManager implements View.OnTouchListener {
                 }
                 setControlMode(isControlMode);
             }
+            //存储当前悬浮球的位置
+            writePosition((int) x, (int) y);
         }
         return false;
     }
@@ -136,16 +177,54 @@ public class FloatingBallManager implements View.OnTouchListener {
         windowManager.updateViewLayout(floatBall, layoutParams);
     }
 
+    /**
+     * 设置悬浮球是否处于控制状态
+     *
+     * @param isControlMode
+     */
     private void setControlMode(boolean isControlMode) {
         if (isControlMode) {
+            //控制状态下最大化悬浮球
             layoutParams.width = maxWidth;
             layoutParams.height = maxWidth;
             windowManager.updateViewLayout(floatBall, layoutParams);
         } else {
+            //移动状态下最小化悬浮球
             layoutParams.width = minWidth;
             layoutParams.height = minWidth;
             windowManager.updateViewLayout(floatBall, layoutParams);
         }
         floatBall.setControlMode(isControlMode);
+    }
+
+    /**
+     * 计算并存储悬浮球当前位置
+     *
+     * @param x
+     * @param y
+     */
+    private void writePosition(float x, float y) {
+        //根据当前状态，选择当前组件的大小
+        float width = isControlMode ? maxWidth : minWidth;
+        //将坐标偏移到左上角
+        x = (int) (x - width / 2);
+        y = (int) (y - width / 2);
+        //计算坐标是否溢出窗口，溢出则重新计算位置
+        if (x < 0) {
+            x = 0;
+        } else if (x + width > windowWidth) {
+            x = (int) (windowWidth - width);
+        }
+
+        if (y - width < 0) {
+            y = 0;
+        } else if (y + width > windowHeight) {
+            y = (int) (windowHeight - width);
+        }
+
+        //将欧标偏移到组件中间
+        x = (int) (x + width / 2);
+        y = (int) (y + width / 2);
+        Util.writePosition(context, x, y);
     }
 }

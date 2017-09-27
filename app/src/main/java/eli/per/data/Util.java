@@ -1,9 +1,10 @@
 package eli.per.data;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 public class Util {
 
@@ -91,5 +92,48 @@ public class Util {
         } catch (Exception e) {
         }
         return statusBarHeight;
+    }
+
+    /**
+     * 获取存储的位置
+     *
+     * @param context
+     * @return
+     */
+    public static final Coordinate readPosition(Context context) {
+        Coordinate position = null;
+        float defaultRawX = 100;
+        float defaultRawY = getWindowHeight(context) - getStatusBarHeight(context) - 200;
+        try {
+            SharedPreferences preferences = context.getSharedPreferences("ControlBallPosition", Context.MODE_PRIVATE);
+            if (preferences != null) {
+                float rawX = preferences.getFloat("rawX", defaultRawX);
+                float rawY = preferences.getFloat("rawY", defaultRawY);
+                position = new Coordinate(rawX, rawY);
+            }
+        } catch (Exception e) {
+            position = new Coordinate(defaultRawX, defaultRawY);
+        }
+        return position;
+    }
+
+    /**
+     * 写入当前位置
+     *
+     * @param context
+     * @param rawX
+     * @param rawY
+     */
+    public static final void writePosition(Context context, float rawX, float rawY) {
+        try {
+            SharedPreferences preferences = context.getSharedPreferences("ControlBallPosition", Context.MODE_PRIVATE);
+            if (preferences != null) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putFloat("rawX", rawX);
+                editor.putFloat("rawY", rawY);
+                editor.commit();
+            }
+        } catch (Exception e) {
+        }
     }
 }
