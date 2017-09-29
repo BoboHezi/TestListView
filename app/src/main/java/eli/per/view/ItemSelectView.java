@@ -185,10 +185,10 @@ public class ItemSelectView extends View {
         pointRadiusX = event.getX();
 
         //控制圆点坐标不会溢出
-        if (pointRadiusX < pointRadius / 2)
-            pointRadiusX = pointRadius / 2;
-        if (pointRadiusX > windowWidth - pointRadius / 2)
-            pointRadiusX = windowWidth - pointRadius / 2;
+        if (pointRadiusX < pointRadius)
+            pointRadiusX = pointRadius;
+        if (pointRadiusX > windowWidth - pointRadius)
+            pointRadiusX = windowWidth - pointRadius;
 
         //当手指抬起时，计算并定位到最近的条目
         if (event.getAction() == MotionEvent.ACTION_UP) {

@@ -17,6 +17,14 @@
         <attr name="select_circleRadius" format="integer" />
     </declare-styleable>
 
+    <declare-styleable name="styleable_item_seek">
+        <attr name="item_seek_lineColor" format="color" />
+        <attr name="item_seek_circleColor" format="color" />
+        <attr name="item_seek_textColor" format="color" />
+        <attr name="item_seek_lineHeight" format="integer" />
+        <attr name="item_seek_circleRadius" format="integer" />
+    </declare-styleable>
+
     <declare-styleable name="styleable_progress_loading">
         <attr name="loading_circleColor" format="color" />
         <attr name="loading_circleRadius" format="float" />

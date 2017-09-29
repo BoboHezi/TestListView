@@ -18,10 +18,10 @@ public class HelpLayer implements View.OnClickListener {
     private boolean isAssisting;
     private int helpLayerIndex = 1;
 
-    public HelpLayer(final Context context, Activity activity) {
+    public HelpLayer(final Context context, Activity activity, int imageID) {
         this.context = context;
 
-        helpImageView = activity.findViewById(R.id.control_help_image);
+        helpImageView = activity.findViewById(imageID);
         helpImageView.setClickable(true);
         helpImageView.setScaleType(ImageView.ScaleType.FIT_XY);
         helpImageView.setOnClickListener(this);

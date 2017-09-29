@@ -133,28 +133,28 @@ public class FloatingBallManager implements View.OnTouchListener {
              *
              * 1.当手指移动距离相对于按下的位置偏移10个像素以上
              *
-             * 2.当按下并且静止的时间大于500毫秒
+             * 2.当按下并且静止的时间大于100毫秒
              */
             float offset = (float) Math.sqrt(((x - touchDownX) * (x - touchDownX) + (y - touchDownY) * (y - touchDownY)));
-            if (offset > 10 && (System.currentTimeMillis() - touchDownTime) > 200) {
+            if (offset > 10 && (System.currentTimeMillis() - touchDownTime) > 100) {
                 if (!isControlMode) {
                     //重新更新悬浮球的位置
                     setPosition((int) x - 60, (int) y - 60);
                 }
-            } else if ((System.currentTimeMillis() - touchDownTime) <= 200) {
+            } else if ((System.currentTimeMillis() - touchDownTime) <= 100) {
                 touchDownTime = System.currentTimeMillis();
             }
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             /**
              * 手指离开时，同时满足以下两个条件：
              *
-             * 1.距离手指按下的时间小于500毫秒
+             * 1.距离手指按下的时间小于100毫秒
              *
              * 2.相对于手指按下的位置没有变化
              *
              * 触发点击事件
              */
-            if ((System.currentTimeMillis() - touchDownTime) <= 200 && (x == touchDownX) && (y == touchDownY)) {
+            if ((System.currentTimeMillis() - touchDownTime) <= 100 && (x == touchDownX) && (y == touchDownY)) {
                 isControlMode = !isControlMode;
                 if (isControlMode) {
                     setPosition(x - maxWidth / 2, y - maxWidth / 2);
