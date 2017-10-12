@@ -15,24 +15,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
-        <!--ListView测试-->
+        <!--主页面-->
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
-        <!--控制页面测试-->
-        <activity
-            android:name=".ControlActivity"
             android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
-        <!--fragment测试页面-->
-        <activity android:name=".FragmentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--ListView测试-->
+        <activity
+            android:name=".ListViewActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <!--控制页面测试-->
+        <activity
+            android:name=".ControlActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <!--fragment测试页面-->
+        <activity android:name=".FragmentActivity"></activity>
 
         <!--网络连接页面-->
         <activity
@@ -44,6 +48,12 @@
             android:name=".FloatingBallActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
+        <!--View Pager-->
+        <activity
+            android:name=".ViewPagerActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <!--控制服务类-->
         <service
             android:name="eli.per.server.ControlService"
             android:enabled="true"

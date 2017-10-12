@@ -1,54 +1,70 @@
 package eli.per.testlistview;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.Button;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-
-    private static final String TAG = "MainActivity";
-    private ListView listView;
-    private MyAdapter adapter;
-    private List<Integer> selectedItem;
+    private Button connectButton;
+    private Button controlButton;
+    private Button floatBallButton;
+    private Button fragmentButton;
+    private Button listViewButton;
+    private Button viewPagerButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView = (ListView) findViewById(R.id.list);
-        listView.setOnItemClickListener(this);
-        adapter = new MyAdapter(this, getData());
-        listView.setAdapter(adapter);
+        initView();
     }
 
-    private List<Map<String, Object>> getData() {
-        List<Map<String, Object>> list = new ArrayList<>();
-        for (int i = 1; i <= 20; i++) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("image", R.mipmap.ic_launcher_round);
-            map.put("title", "bobo" + i);
-            map.put("info", "详细信息");
-            list.add(map);
-        }
-        return list;
+    private void initView() {
+        connectButton = (Button) findViewById(R.id.main_connect);
+        connectButton.setOnClickListener(this);
+        controlButton = (Button) findViewById(R.id.main_control);
+        controlButton.setOnClickListener(this);
+        floatBallButton = (Button) findViewById(R.id.main_float_ball);
+        floatBallButton.setOnClickListener(this);
+        fragmentButton = (Button) findViewById(R.id.main_fragments);
+        fragmentButton.setOnClickListener(this);
+        listViewButton = (Button) findViewById(R.id.main_list_view);
+        listViewButton.setOnClickListener(this);
+        viewPagerButton = (Button) findViewById(R.id.main_view_pager);
+        viewPagerButton.setOnClickListener(this);
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        if (selectedItem == null) {
-            selectedItem = new ArrayList<>();
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.main_connect:
+                startActivity(new Intent(MainActivity.this, ConnectActivity.class));
+                break;
+
+            case R.id.main_control:
+                startActivity(new Intent(MainActivity.this, ControlActivity.class));
+                break;
+
+            case R.id.main_float_ball:
+                startActivity(new Intent(MainActivity.this, FloatingBallActivity.class));
+                break;
+
+            case R.id.main_fragments:
+                startActivity(new Intent(MainActivity.this, FragmentActivity.class));
+                break;
+
+            case R.id.main_list_view:
+                startActivity(new Intent(MainActivity.this, ListViewActivity.class));
+                break;
+
+            case R.id.main_view_pager:
+                startActivity(new Intent(MainActivity.this, ViewPagerActivity.class));
+                break;
         }
-        selectedItem.add(i);
-        adapter.setSelectedItem(selectedItem);
-        adapter.notifyDataSetChanged();
     }
 }
