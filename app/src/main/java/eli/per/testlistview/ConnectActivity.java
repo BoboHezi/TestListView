@@ -10,22 +10,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import eli.per.thread.CommandServer;
 import eli.per.thread.TestCommand;
 
 public class ConnectActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "ConnectActivity";
     private final int port = 15231;
-    private final String host = "10.42.0.1";
+    private final String host = "192.168.2.200";
 
-    private Button startButton;
+    private Button connectButton;
+    private Button sendButton;
+    private Button disconnectButton;
     private Button cleanButton;
     private EditText dataInput;
     private TextView infoText;
     private int commandData;
+    private CommandServer commandServer;
 
     private UIHandler uiHandler;
-    private TestCommand testCommand;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,31 +36,53 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_connect);
 
         uiHandler = new UIHandler();
-        testCommand = new TestCommand(uiHandler);
+        commandServer = new CommandServer(uiHandler);
         initView();
     }
 
     private void initView() {
-        startButton = (Button) findViewById(R.id.connect_start_button);
+        connectButton = (Button) findViewById(R.id.connect_connect_button);
+        sendButton = (Button) findViewById(R.id.connect_send_button);
+        disconnectButton = (Button) findViewById(R.id.connect_disconnect_button);
         cleanButton = (Button) findViewById(R.id.connect_clean_button);
         dataInput = (EditText) findViewById(R.id.main_data_edittext);
         infoText = (TextView) findViewById(R.id.main_info_textview);
 
-        startButton.setOnClickListener(this);
+        connectButton.setOnClickListener(this);
         cleanButton.setOnClickListener(this);
+        sendButton.setOnClickListener(this);
+        disconnectButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.connect_start_button) {
-            //创建连接
-            if (testCommand != null && !testCommand.isConnected()) {
-                String value = (dataInput.getText().toString()).equals("") ? "0" : dataInput.getText().toString();
-                commandData = Integer.parseInt(value);
-                testCommand.connect(host, port, commandData);
-            }
-        } else if (view.getId() == R.id.connect_clean_button) {
-            infoText.setText("信息：\n");
+        switch (view.getId()) {
+            case R.id.connect_connect_button:
+                if (commandServer != null) {
+                    commandServer.connect();
+                }
+                break;
+
+            case R.id.connect_send_button:
+                if (commandServer != null && commandServer.isConnected()) {
+                    String value = (dataInput.getText().toString()).equals("") ? "0" : dataInput.getText().toString();
+                    try {
+                        commandData = Integer.parseInt(value);
+                    } catch (Exception e) {
+                    }
+                    commandServer.sendData(commandData);
+                }
+                break;
+
+            case R.id.connect_disconnect_button:
+                if (commandServer != null) {
+                    commandServer.disconnect();
+                }
+                break;
+
+            case R.id.connect_clean_button:
+                infoText.setText("信息：\n");
+                break;
         }
     }
 

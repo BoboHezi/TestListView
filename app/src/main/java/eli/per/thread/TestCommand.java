@@ -66,6 +66,9 @@ public class TestCommand {
 
                             byte buffers[];
 
+                            //发送数据
+                            outputStream.write(234);
+
                             //接收验证数据
                             buffers = readBytes();
                             String value = new String(buffers, 0, valueLength);
@@ -92,7 +95,7 @@ public class TestCommand {
                             }
 
                             //发送控制命令
-                            outputStream.writeInt(commandData);
+                            outputStream.write(intToByteArray(commandData));
                             msg = "Send Command Data: " + value;
                             Log.i(TAG, msg);
                             postMsg(msg);
@@ -105,7 +108,7 @@ public class TestCommand {
                             if (clientSocket != null)
                                 clientSocket.close();
                             Log.i(TAG, "Closed...");
-                            postMsg("Closed...");
+                            postMsg("Closed...\n------------------------");
                         } catch (Exception e) {
                             Log.e(TAG, "", e);
                             postMsg("Connect Fail.");
@@ -113,6 +116,22 @@ public class TestCommand {
                     }
                 }
         ).start();
+    }
+
+    /**
+     * 将Int型数据转为字节数组
+     *
+     * @param value
+     * @return
+     */
+    private byte[] intToByteArray(int value) {
+        byte[] result = new byte[4];
+        //由高位到低位
+        result[0] = (byte) ((value >> 24) & 0xFF);
+        result[1] = (byte) ((value >> 16) & 0xFF);
+        result[2] = (byte) ((value >> 8) & 0xFF);
+        result[3] = (byte) (value & 0xFF);
+        return result;
     }
 
     /**
