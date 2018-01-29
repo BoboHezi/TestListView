@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="eli.per.testlistview.ListViewActivity">
 
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:clickable="true"
+        android:src="@drawable/wifi"
+        app:backgroundTint="#0a5a64"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        app:pressedTranslationZ="10dp"
+        app:rippleColor="#ff87ffeb" />
+
     <ListView
         android:id="@+id/list"
-        android:clickable="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
-
-</android.support.constraint.ConstraintLayout>
+        android:layout_height="wrap_content"
+        android:clickable="true">
+    </ListView>
+</android.support.design.widget.CoordinatorLayout>

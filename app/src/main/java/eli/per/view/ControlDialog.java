@@ -18,15 +18,12 @@ import eli.per.data.OnControlStateChangeListener;
 import eli.per.data.Util;
 import eli.per.data.Velocity;
 import eli.per.testlistview.R;
+import eli.per.thread.CommandServer;
 
 public class ControlDialog extends Dialog implements OnControlStateChangeListener {
 
     private static final String TAG = "ControlDialog";
     private Context context;
-
-    private boolean isFirstLauncher = true;
-    private int helpLayerIndex = 1;
-    private ImageView helpImageView;
 
     //分辨率选择视图
     private ItemSelectView itemSelectView;
@@ -68,8 +65,6 @@ public class ControlDialog extends Dialog implements OnControlStateChangeListene
         lightSwitchView = findViewById(R.id.control_switch);
         lightSwitchView.setOnControlStateChangedListener(this);
         lightSwitchView.setSwitch(true);
-
-        helpImageView = findViewById(R.id.control_dialog_help_image);
     }
 
     @Override

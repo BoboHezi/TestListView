@@ -17,7 +17,7 @@ import eli.per.testlistview.ConnectActivity;
 public class CommandServer {
 
     private static final String TAG = "CommandServer";
-    private final String host = "192.168.2.200";
+    private final String host = "192.168.2.128";
     private final int port = 15231;
     private Socket clientSocket;
     private DataInputStream inputStream;
@@ -48,7 +48,10 @@ public class CommandServer {
     /**
      * 连接到Server
      */
-    public void connect() {
+    public void connectThread() {
+        if (isConnected()) {
+            return;
+        }
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -56,6 +59,7 @@ public class CommandServer {
                     postMsg("try to connect server...");
                     clientSocket = new Socket();
                     clientSocket.connect(new InetSocketAddress(host, port), 3000);
+                    clientSocket.setSoTimeout(2000);
                     postMsg("connect to server...");
 
                     inputStream = new DataInputStream(clientSocket.getInputStream());
@@ -81,6 +85,45 @@ public class CommandServer {
     }
 
     /**
+     * 发送控制数据
+     */
+    public void sendDataThread(final int value) {
+        if (!isConnected())
+            return;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //send command data
+                    outputStream.write(intToByteArray(value));
+                    postMsg("send command data: " + value);
+                } catch (Exception e) {
+                    postMsg(e.getMessage());
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 断开连接
+     */
+    public void disconnectThread() {
+        try {
+            if (inputStream != null)
+                inputStream.close();
+            if (outputStream != null)
+                outputStream.close();
+            if (clientSocket != null)
+                clientSocket.close();
+            postMsg("disconnected");
+        } catch (Exception e) {
+            postMsg(e.getMessage());
+        } finally {
+            clientSocket = null;
+        }
+    }
+
+    /**
      * 验证设备
      */
     private boolean verify() {
@@ -102,39 +145,18 @@ public class CommandServer {
             //receive verify result
             buffers = readBytes();
             postMsg(new String(buffers));
-            outputStream.writeInt(0);
             return true;
         } catch (Exception e) {
             postMsg("verify failed");
-            e.printStackTrace();
+            disconnectThread();
             return false;
         }
     }
 
     /**
-     * 发送控制数据
+     * 释放资源
      */
-    public void sendData(final int value) {
-        if (!isConnected())
-            return;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //send command data
-                    outputStream.write(intToByteArray(value));
-                    postMsg("send command data: " + value);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    /**
-     * 断开连接
-     */
-    public void disconnect() {
+    public void destory() {
         try {
             if (inputStream != null)
                 inputStream.close();
@@ -142,9 +164,11 @@ public class CommandServer {
                 outputStream.close();
             if (clientSocket != null)
                 clientSocket.close();
-            postMsg("disconnected");
         } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            inputStream = null;
+            outputStream = null;
+            clientSocket = null;
         }
     }
 
@@ -153,7 +177,7 @@ public class CommandServer {
      *
      * @return
      */
-    public byte[] readBytes() {
+    private byte[] readBytes() {
         byte buffer[] = new byte[10240];
         byte data[] = null;
         try {

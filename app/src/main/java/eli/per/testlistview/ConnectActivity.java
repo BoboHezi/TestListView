@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import eli.per.thread.CommandServer;
-import eli.per.thread.TestCommand;
 
 public class ConnectActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -59,7 +58,7 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
         switch (view.getId()) {
             case R.id.connect_connect_button:
                 if (commandServer != null) {
-                    commandServer.connect();
+                    commandServer.connectThread();
                 }
                 break;
 
@@ -70,13 +69,13 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
                         commandData = Integer.parseInt(value);
                     } catch (Exception e) {
                     }
-                    commandServer.sendData(commandData);
+                    commandServer.sendDataThread(commandData);
                 }
                 break;
 
             case R.id.connect_disconnect_button:
                 if (commandServer != null) {
-                    commandServer.disconnect();
+                    commandServer.disconnectThread();
                 }
                 break;
 
